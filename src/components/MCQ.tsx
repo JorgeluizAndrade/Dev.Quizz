@@ -33,6 +33,18 @@ const MCQ = ({ game }: Props) => {
   const [hasEnded, setHasEnded] = React.useState<boolean>(false);
   const [now, setNow] = React.useState<Date>(new Date());
 
+  const currentQuestion = React.useMemo(() => {
+    return game.questions[questionIndex];
+  }, [questionIndex, game.questions]);
+  
+  const options = React.useMemo(() => {
+     if (!currentQuestion) return [];
+     if (!currentQuestion.options) return [];  
+    return JSON.parse(currentQuestion.options as string) as string[];
+  }, [currentQuestion]);
+
+
+
   React.useEffect(() => {
     const interval = setInterval(() => {
       if (!hasEnded) {
@@ -43,9 +55,7 @@ const MCQ = ({ game }: Props) => {
     return () => clearInterval(interval);
   }, [hasEnded]);
 
-  const currentQuestion = React.useMemo(() => {
-    return game.questions[questionIndex];
-  }, [questionIndex, game.questions]);
+  
 
   const { mutate: checkAnswer, isLoading: isChecking } = useMutation({
     mutationFn: async () => {
@@ -108,11 +118,6 @@ const MCQ = ({ game }: Props) => {
     });
   }, [checkAnswer, isChecking, game.questions.length, questionIndex, endGame]);
 
-  const options = React.useMemo(() => {
-    return JSON.parse(currentQuestion.options as string) as string[];
-
-    if (!currentQuestion) return [];
-  }, [currentQuestion]);
 
   if (hasEnded) {
     return (
@@ -163,7 +168,7 @@ const MCQ = ({ game }: Props) => {
             </div>
           </h2>
           <CardBody className="flex-grow text-lg">
-            {currentQuestion.question}
+            {currentQuestion?.question}
           </CardBody>
         </CardHeader>
       </Card>
@@ -176,7 +181,7 @@ const MCQ = ({ game }: Props) => {
               variant="ghost"
               onClick={() => setSelectedChoice(index)}
               className="justify-start w-full py-8 mb-4"
-              key={index}
+              key={option}
             >
               <div className="flex items-center justify-start ">
                 <div className="p-2 px-3 mr-5 border rounded-md">
