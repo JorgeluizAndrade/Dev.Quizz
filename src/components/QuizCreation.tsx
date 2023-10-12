@@ -12,12 +12,13 @@ import {
 import { BookOpen, CopyCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { z } from "zod";
+import { ZodError, z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import LoadingRadar from "./LoadingRadar";
+import { toast } from "react-toastify";
 
 type Props = {
   topic: string;
@@ -65,18 +66,32 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
         type: input.type,
       },
       {
-        onSuccess: ({ gameId }) => {
-          setShowLoader(true);
+        onSuccess: ({ gameId }: { gameId: string })  => {
+          setFinishedLoading(true);
           setTimeout(()=> {
             if (form.getValues("type") === "open_ended") {
               router.push(`/play/open-ended/${gameId}`);
             } else if (form.getValues("type") === "mcq") {
               router.push(`/play/mcq/${gameId}`);
             }
-          }, 1000)
+          }, 2000)
         },
-        onError: () => {
+        onError: (error) => {
           setShowLoader(false)
+          if(error instanceof AxiosError){
+              if(error.response?.status === 500){
+                toast('Something went wrong', {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
+              }
+          }
         }
       }
     );
@@ -140,9 +155,11 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                 render={({ field }) => (
                   <div className="flex justify-between">
                     <Button
-                      color={field.value === "mcq" ? "success" : "default"}
+                      color={ form.getValues("type") === "mcq" ?  "success" : "default"}
                       className="w-1/2 rounded-none rounded-l-lg"
-                      onClick={() => field.onChange("mcq")}
+                      onClick={() => {
+                        form.setValue("type", "mcq");
+                      }}
                       type="button"
                     >
                       <CopyCheck className="w-4 h-4 mr-2" /> Multiple Choice
@@ -150,10 +167,10 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                     <Divider orientation="vertical" />
                     <Button
                       color={
-                        field.value === "open_ended" ? "success" : "default"
+                        form.getValues("type") === "open_ended" ? "success" : "default"
                       }
                       className="w-1/2 rounded-none rounded-r-lg"
-                      onClick={() => field.onChange("open_ended")}
+                      onClick={() => form.setValue("type", "open_ended")}
                       type="button"
                     >
                       <BookOpen className="w-4 h-4 mr-2" /> Open Ended
