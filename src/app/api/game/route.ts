@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import axios from "axios";
 
+
 export async function POST(req: Request, res: Response) {
   try {
     const session = await getAuthSession();
@@ -39,6 +40,7 @@ export async function POST(req: Request, res: Response) {
       }
     );
 
+
     if (type === "mcq") {
       type mcqQuestion = {
         question: string;
@@ -67,20 +69,19 @@ export async function POST(req: Request, res: Response) {
         data: manyData,
       });
     } else if (type === "open_ended") {
-      type openQuestion = {
+      type openEndedQuestion = {
         question: string;
         answer: string;
-      };
-      await prisma.question.createMany({
-        data: data.questions.map((question: openQuestion) => {
-          return {
-            question: question.question,
-            answer: question.answer,
-            gameId: game.id,
-            questionType: "open_ended",
-          };
-        }),
+        }
+      const openQuestions = data.questions.map((question: openEndedQuestion) => {
+        return {
+          question: question.question,
+          answer: question.answer,
+          gameId: game.id,
+          questionType: "open_ended",
+        };
       });
+      await prisma.question.createMany({ data: openQuestions });
     }
 
     return NextResponse.json({ gameId: game.id }, { status: 200 });
@@ -99,15 +100,6 @@ export async function POST(req: Request, res: Response) {
 
 export async function GET(req: Request, res: Response) {
   try {
-    const session = await getAuthSession();
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: "You must be logged in to create a game." },
-        {
-          status: 401,
-        }
-      );
-    }
     const url = new URL(req.url);
     const gameId = url.searchParams.get("gameId");
     if (!gameId) {
@@ -135,9 +127,6 @@ export async function GET(req: Request, res: Response) {
         }
       );
     }
-
-    console.log("gameId:", gameId);
-  console.log("game:", game);
 
     return NextResponse.json(
       { game },
