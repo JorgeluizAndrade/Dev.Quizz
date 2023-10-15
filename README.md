@@ -31,5 +31,9 @@ PlanetScale and Prisma.
 ## OpenAi
 To implement ChatGPT's functionality, I have chosen to use prompts. These prompts allow us to create questions and answers.
 
+## Technical problem
+
+The project faces a "504 Gateway Timeout" error when interacting with the "questions" and "game" routes. This indicates that requests to fetch GPT-3 questions and manage games are exceeding the time limit, causing significant delay. The slowdown is negatively impacting the user experience and needs to be fixed.
+
 
 
