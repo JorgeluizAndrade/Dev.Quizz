@@ -14,7 +14,7 @@ import { ChevronRight, LineChart, Timer } from "lucide-react";
 import React from "react";
 import { differenceInSeconds } from "date-fns";
 import MCQCounter from "./MCQCounter";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { z } from "zod";
 import { checkAnswerSchema, endGameSchema } from "@/schemas/getQuestionsSchema";
@@ -55,9 +55,7 @@ const MCQ = ({ game }: Props) => {
     return () => clearInterval(interval);
   }, [hasEnded]);
 
-  
-
-  const { mutate: checkAnswer, isLoading: isChecking } = useMutation({
+  const { mutateAsync: checkAnswer, isLoading: isChecking } = useMutation({
     mutationFn: async () => {
       const payload: z.infer<typeof checkAnswerSchema> = {
         questionId: currentQuestion.id,
@@ -68,8 +66,8 @@ const MCQ = ({ game }: Props) => {
     },
   });
 
-    const { mutate: endGame } = useMutation({
-    mutationFn: async () => {
+    const { data: endGame } = useQuery({
+    queryFn: async () => {
       const payload: z.infer<typeof endGameSchema> = {
         gameId: game.id,
       };
