@@ -16,7 +16,7 @@ import { ZodError, z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { MutationCache, useMutation } from "@tanstack/react-query";
 import LoadingRadar from "./LoadingRadar";
 import { toast } from "react-toastify";
 
@@ -30,12 +30,12 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
   const router = useRouter();
   const [showLoader, setShowLoader] = React.useState(false);
   const [finishedLoading, setFinishedLoading] = React.useState(false);
-  const { mutate: getQuestions, isLoading } = useMutation({
+  const { mutateAsync: getQuestions, isLoading } = useMutation({
     mutationFn: async ({ amount, topic, type }: Input) => {
       const response = await axios.post("/api/game", { amount, topic, type });
       return response.data;
     },
-  });
+  }, );
 
   const validateTopic = (tpc: string) => {
     return true;
@@ -68,14 +68,15 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
       {
         onSuccess: ({ gameId }: { gameId: string })  => {
           setFinishedLoading(true);
-          setTimeout(()=> {
+       const timeOut = setTimeout(()=> {
             if (form.getValues("type") === "open_ended") {
               router.push(`/play/open-ended/${gameId}`);
             } else if (form.getValues("type") === "mcq") {
               router.push(`/play/mcq/${gameId}`);
             }
-          }, 2000)
-        },
+            }, 2000);
+            return () => clearTimeout(timeOut);
+        },  
         onError: (error) => {
           setShowLoader(false)
           if(error instanceof AxiosError){
@@ -92,7 +93,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                   });
               }
           }
-        }
+        },
       }
     );
   };
