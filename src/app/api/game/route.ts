@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import axios from "axios";
 
-
 export async function POST(req: Request, res: Response) {
   try {
     const session = await getAuthSession();
@@ -39,9 +38,7 @@ export async function POST(req: Request, res: Response) {
         type,
       }
     );
-
-
-    if (type === "mcq") {
+    const runGame = async () => {
       type mcqQuestion = {
         question: string;
         answer: string;
@@ -49,51 +46,60 @@ export async function POST(req: Request, res: Response) {
         option2: string;
         option3: string;
       };
-      const manyData = data.questions.map((question: mcqQuestion) => {
-        let options = [
-          question.option1,
-          question.option2,
-          question.option3,
-          question.answer,
-        ].sort(() => Math.random() - 0.5);
-
-        return {
-          question: question.question,
-          answer: question.answer,
-          options: JSON.stringify(options),
-          gameId: game.id,
-          questionType: "mcq",
-        };
-      });
-      await prisma.question.createMany({
-        data: manyData,
-      });
-    } else if (type === "open_ended") {
       type openEndedQuestion = {
         question: string;
         answer: string;
-        }
-      const openQuestions = data.questions.map((question: openEndedQuestion) => {
-        return {
-          question: question.question,
-          answer: question.answer,
-          gameId: game.id,
-          questionType: "open_ended",
-        };
-      });
-      await prisma.question.createMany({ data: openQuestions });
-    }
-
+      };
+      {
+        type === "mcq"
+          ? async () => {
+              const manyData = data.questions.map((question: mcqQuestion) => {
+                let options = [
+                  question.question,
+                  question.option1,
+                  question.option2,
+                  question.option3,
+                  question.answer,
+                ].sort(() => Math.random() * 0.5);
+                return {
+                  question: question.question,
+                  answer: question.answer,
+                  options: JSON.stringify(options),
+                  gameId: game.id,
+                  questionType: "mcq",
+                };
+              });
+              await prisma.question.createMany({
+                data: manyData,
+              });
+            }
+          : async () => {
+              const openQuestions = data.questions.map(
+                (question: openEndedQuestion) => {
+                  return {
+                    question: question.question,
+                    answer: question.answer,
+                    gameId: game.id,
+                    questionType: "open_ended",
+                  };
+                }
+              );
+              await prisma.question.createMany({ data: openQuestions });
+            };
+      }
+      
+      await runGame();
+    };
     return NextResponse.json({ gameId: game.id }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 });
     } else {
-      console.log(error)
+      console.log(error);
       return NextResponse.json(
         { error: "An unexpected error occurred." },
         { status: 500 }
-        );
+      );
     }
   }
 }
