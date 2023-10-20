@@ -1,34 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Dev.quizz
+Welcome to Dev.quizz, a website for developers who want to test their knowledge.
 
-## Getting Started
+## Technologies Used
+In this project, I are making use of the following technologies:
 
-First, run the development server:
+<ul>
+ <li> Next.js</li>
+  <li>TypeScript</li>
+  <li>Next.js</li>
+  <li>Prisma</li>
+  <li>PlanetScale</li>
+  <li>Api OpenAI</li>
+  <li>NextAuth</li>
+  <li>NextUI</li>
+  <li>Framer Motion</li>
+  <li>Tailwind CSS</li>
+</ul>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## About the Project
+Dev.quizz is a quiz with the following features:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<li>Interaction with OpenAI, it creates your questions and answers</li>
+<li>JWT authentication to ensure user data security and protection.</li>
+<li>Google authentication for easy and convenient login to the platform.</li>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Database
+PlanetScale and Prisma.
 
-## Learn More
+## OpenAi
+To implement ChatGPT's functionality, I have chosen to use prompts. These prompts allow us to create questions and answers.
 
-To learn more about Next.js, take a look at the following resources:
+## Technical problem
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The project faces a "504 Gateway Timeout" error when interacting with the "questions" and "game" routes. This indicates that requests to fetch GPT-3 questions and manage games are exceeding the time limit, causing significant delay. The slowdown is negatively impacting the user experience and needs to be fixed.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
