@@ -33,7 +33,7 @@ To implement ChatGPT's functionality, I have chosen to use prompts. These prompt
 
 ## Technical problem
 
-The project faces a "504 Gateway Timeout" error when interacting with the "questions" and "game" routes. This indicates that requests to fetch GPT-3 questions and manage games are exceeding the time limit, causing significant delay. The slowdown is negatively impacting the user experience and needs to be fixed.
+The project faces a "504 Gateway Timeout" error when interacting with the "questions" and "game" routes. This indicates that requests to fetch GPT-3 questions and manage games are exceeding the time limit, causing significant delay. The slowdown is negatively impacting the user experience and needs to be fixed. If you want help me, contact me on this email -> luizj1817@gmail.com.
 
 
 
