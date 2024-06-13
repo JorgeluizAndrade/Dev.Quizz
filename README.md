@@ -26,8 +26,7 @@ Dev.quizz is a quiz with the following features:
 
 
 ## Database
-PlanetScale and Prisma.
-
+Prisma with planetScale. 
 ## OpenAi
 To implement ChatGPT's functionality, I have chosen to use prompts. These prompts allow us to create questions and answers.
 
