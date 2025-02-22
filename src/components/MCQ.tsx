@@ -28,32 +28,33 @@ type Props = {
 const MCQ = ({ game }: Props) => {
   const [questionIndex, setQuestionIndex] = React.useState(0);
   const [selectedChoice, setSelectedChoice] = React.useState<number>(0);
-  const [CorrectAnswer, setCorrectAnswer] = React.useState<number>(0);
-  const [WrongAnswer, setWrongAnswer] = React.useState<number>(0);
+  const [correctAnswer, setCorrectAnswer] = React.useState<number>(0);
+  const [wrongAnswer, setWrongAnswer] = React.useState<number>(0);
   const [hasEnded, setHasEnded] = React.useState<boolean>(false);
   const [now, setNow] = React.useState<Date>(new Date());
 
-  const currentQuestion = React.useMemo(() => {
-    return game.questions[questionIndex];
-  }, [questionIndex, game.questions]);
   
-  const options = React.useMemo(() => {
-     if (!currentQuestion) return [];
-     if (!currentQuestion.options) return [];  
-    return JSON.parse(currentQuestion.options as string) as string[];
-  }, [currentQuestion]);
-
-
-
   React.useEffect(() => {
     const interval = setInterval(() => {
       if (!hasEnded) {
         setNow(new Date());
       }
-    }, 1000);
+    }, 10);
 
     return () => clearInterval(interval);
   }, [hasEnded]);
+  
+  const currentQuestion = React.useMemo(() => {
+    return game.questions[questionIndex];
+  }, [questionIndex, game.questions]);
+
+  const options = React.useMemo(() => {
+    if (!currentQuestion) return [];
+    if (!currentQuestion.options) return [];
+    return Array.isArray(currentQuestion.options)
+      ? currentQuestion.options
+      : JSON.parse(currentQuestion.options as string);
+  }, [currentQuestion]);
 
   const { mutateAsync: checkAnswer, isLoading: isChecking } = useMutation({
     mutationFn: async () => {
@@ -65,9 +66,9 @@ const MCQ = ({ game }: Props) => {
       return response.data;
     },
   });
-
-    const { data: endGame } = useQuery({
-    queryFn: async () => {
+  
+  const { mutateAsync: endGame } = useMutation({
+    mutationFn: async () => {
       const payload: z.infer<typeof endGameSchema> = {
         gameId: game.id,
       };
@@ -76,10 +77,10 @@ const MCQ = ({ game }: Props) => {
     },
   });
 
-  const handleNext = React.useCallback(() => {
+  const handleNext = React.useCallback(async () => {
     if (isChecking) return;
-    checkAnswer(undefined, {
-      onSuccess: ({ isCorrect }) => {
+    await checkAnswer(undefined, {
+      onSuccess: async ({ isCorrect }) => {
         if (isCorrect) {
           toast.info("🧠 Wow so easy!", {
             position: "top-center",
@@ -106,17 +107,17 @@ const MCQ = ({ game }: Props) => {
           setWrongAnswer((prev) => prev + 1);
         }
         if (questionIndex == game.questions.length - 1) {
-          endGame();
+          await endGame();
           setHasEnded(true);
           return;
         }
-
+        setSelectedChoice(-1);
         setQuestionIndex((prev) => prev + 1);
       },
     });
   }, [checkAnswer, isChecking, game.questions.length, questionIndex, endGame]);
 
-
+  
   if (hasEnded) {
     return (
       <div className="absolute flex flex-col items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -124,7 +125,7 @@ const MCQ = ({ game }: Props) => {
           You completed in:{" "}
           {timeDelta(differenceInSeconds(now, game.timeStarted))}
         </div>
-        <MCQCounter correctAnswers={CorrectAnswer} wrongAnswers={WrongAnswer} />
+        <MCQCounter correctAnswers={correctAnswer} wrongAnswers={wrongAnswer} />
         <Link href={"/"} className={cn(button(), "mt-2")}>
           Go black to dashboard
         </Link>
@@ -155,7 +156,7 @@ const MCQ = ({ game }: Props) => {
             <span>{timeDelta(differenceInSeconds(now, game.timeStarted))}</span>
           </div>
         </div>
-        <MCQCounter correctAnswers={CorrectAnswer} wrongAnswers={WrongAnswer} />
+        <MCQCounter correctAnswers={correctAnswer} wrongAnswers={wrongAnswer} />
       </div>
       <Card className="w-full mt-4">
         <CardHeader className="flex flex-row items-center">
@@ -172,14 +173,14 @@ const MCQ = ({ game }: Props) => {
       </Card>
 
       <div className="flex flex-col items-center justify-center w-full mt-4">
-        {options.map((option, index) => {
+        {options.map((option: any, index: number) => {
           return (
             <Button
               color={selectedChoice === index ? "primary" : "default"}
               variant="ghost"
               onClick={() => setSelectedChoice(index)}
               className="justify-start w-full py-8 mb-4"
-              key={option}
+              key={index}
             >
               <div className="flex items-center justify-start ">
                 <div className="p-2 px-3 mr-5 border rounded-md">
