@@ -4,8 +4,8 @@ import { quizCreationSchema } from "@/schemas/form/quiz";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import axios from "axios";
-
 export async function POST(req: Request, res: Response) {
+
   try {
     const session = await getAuthSession();
     if (!session?.user) {
@@ -16,7 +16,6 @@ export async function POST(req: Request, res: Response) {
         { status: 401 }
       );
     }
-
     const body = await req.json();
 
     const { amount, topic, type } = quizCreationSchema.parse(body);
@@ -29,7 +28,6 @@ export async function POST(req: Request, res: Response) {
         topic,
       },
     });
-
     const { data } = await axios.post(
       `${process.env.API_URL as string}/api/questions`,
       {
@@ -38,7 +36,7 @@ export async function POST(req: Request, res: Response) {
         type,
       }
     );
-    const runGame = async () => {
+    if (type === "mcq") {
       type mcqQuestion = {
         question: string;
         answer: string;
@@ -46,56 +44,50 @@ export async function POST(req: Request, res: Response) {
         option2: string;
         option3: string;
       };
-      type openEndedQuestion = {
+      const manyData = data.questions.map((question: mcqQuestion) => {
+        let options = [
+          question.option1,
+          question.option2,
+          question.option3,
+          question.answer,
+        ].sort(() => Math.random() - 0.5);
+        return {
+          question: question.question,
+          answer: question.answer,
+          options: JSON.stringify(options),
+          gameId: game.id,
+          questionType: "mcq",
+        };
+      });
+
+      await prisma.question.createMany({
+        data: manyData,
+      });
+
+    } else if (type === "open_ended") {
+      type openQuestion = {
         question: string;
         answer: string;
       };
-      {
-        type === "mcq"
-          ? async () => {
-              const manyData = data.questions.map((question: mcqQuestion) => {
-                let options = [
-                  question.question,
-                  question.option1,
-                  question.option2,
-                  question.option3,
-                  question.answer,
-                ].sort(() => Math.random() * 0.5);
-                return {
-                  question: question.question,
-                  answer: question.answer,
-                  options: JSON.stringify(options),
-                  gameId: game.id,
-                  questionType: "mcq",
-                };
-              });
-              await prisma.question.createMany({
-                data: manyData,
-              });
-            }
-          : async () => {
-              const openQuestions = data.questions.map(
-                (question: openEndedQuestion) => {
-                  return {
-                    question: question.question,
-                    answer: question.answer,
-                    gameId: game.id,
-                    questionType: "open_ended",
-                  };
-                }
-              );
-              await prisma.question.createMany({ data: openQuestions });
-            };
-      }
-      
-      await runGame();
-    };
+
+      const open_endedQuestion = data.questions.map((question: openQuestion) => {
+        return {
+          question: question.question,
+          answer: question.answer,
+          gameId: game.id,
+          questionType: "open_ended",
+        }
+      })
+
+      await prisma.question.createMany({ data: open_endedQuestion });
+    }
+
     return NextResponse.json({ gameId: game.id }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 });
     } else {
-      console.log(error);
+      console.log(error)
       return NextResponse.json(
         { error: "An unexpected error occurred." },
         { status: 500 }
@@ -103,6 +95,7 @@ export async function POST(req: Request, res: Response) {
     }
   }
 }
+
 
 export async function GET(req: Request, res: Response) {
   try {
