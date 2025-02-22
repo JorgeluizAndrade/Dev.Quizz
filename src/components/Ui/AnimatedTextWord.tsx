@@ -47,7 +47,7 @@ const AnimatedTextWord = ({ text }: Props) => {
       animate="visible"
     >
       {words.map((word, idx) => (
-        <motion.span variants={child} className="mr-[4px]" key={idx}>
+        <motion.span variants={child} className="mr-[4px] hyphens-auto" key={idx}>
           {word}
         </motion.span>
       ))}

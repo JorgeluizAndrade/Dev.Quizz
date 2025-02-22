@@ -5,9 +5,11 @@ import { redirect } from 'next/navigation';
 import React from 'react'
 
 
+
+
 export const metadata: Metadata = {
-    title: "Quiz | Dev.Quizz",
-    description: "Dev.Quizz for developers who want to test their knowledge",
+    title: "Quiz Creator | Dev.Quizz",
+    description: "Let's play a quizz with AI, just choose a topic!",
   };
 
   interface Props {

@@ -51,7 +51,7 @@ const rows = [
   {
     key: "5",
     author: "Kamran Ahmed",
-    NameRepo: "design-patterns-for-humans ",
+    NameRepo: "design-patterns-for-humans",
     difficulty: "Intermediate",
     githubLink: "https://github.com/kamranahmedse/design-patterns-for-humans",
   },
@@ -71,10 +71,10 @@ const rows = [
   },
   {
     key: "8",
-    author: "Free Ebook Foundation",
-    NameRepo: "free-programming-books",
+    author: "?",
+    NameRepo: "Project Based Learning",
     difficulty: "Beginner",
-    githubLink: "https://github.com/EbookFoundation/free-programming-books",
+    githubLink: "https://github.com/practical-tutorials/project-based-learning",
   },
 ];
 

@@ -22,21 +22,26 @@ const Dashboard = async (props: Props) => {
     redirect("/");
   }
   return (
-    <main className="p-8 mx-auto max-w-7xl">
-      <div className="flex items-center">
-        <h2 className="mr-2 text-3xl font-bold tracking-tight">
-          <AnimatedTextWord text="Dashboard"/>
-        </h2>
-      </div>
+    <main className="container mx-auto px-4 py-8 space-y-6">
+      <header className="flex items-center">
+        <h1 className="text-3xl font-bold tracking-tight">
+          <AnimatedTextWord text="Dashboard" />
+        </h1>
+      </header>
 
-      <div className="grid gap-4 mt-4 md:grid-cols-2">
+      <section className="grid gap-6 sm:grid-cols-2">
         <QuizMeCard />
         <HistoryCard />
-      </div>
-      <div className="grid gap-4 mt-4 md:grid-cols-2 grid-cols-1">
-        <LearnMore />
-        <RecentActivities />
-      </div>
+      </section>
+
+      <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="sm:col-span-2 lg:col-span-2">
+          <LearnMore />
+        </div>
+        <div className="sm:col-span-2 lg:col-span-1">
+          <RecentActivities />
+        </div>
+      </section>
     </main>
   );
 };

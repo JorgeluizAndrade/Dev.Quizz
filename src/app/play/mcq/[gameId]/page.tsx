@@ -3,11 +3,17 @@ import { prisma } from "@/lib/db";
 import { getAuthSession } from "@/lib/nextauth";
 import { redirect } from "next/navigation";
 import React from "react";
+import type { Metadata } from "next";
+
 
 type Props = {
   params: {
     gameId: string;
   };
+};
+
+export const metadata: Metadata = {
+  title: "Multiple choice Game | Dev.Quizz"
 };
 
 const MCQPage = async ({ params: { gameId } }: Props) => {

@@ -6,11 +6,19 @@ import { getAuthSession } from "@/lib/nextauth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
+import type { Metadata } from "next";
+
 
 type Props = {
   params: {
     gameId: string;
   };
+};
+
+
+export const metadata: Metadata = {
+  title: "Statistic | Dev.Quizz",
+  description: "See my statistic in game",
 };
 
 const StatisticsPage = async ({ params: { gameId } }: Props) => {
@@ -32,7 +40,7 @@ const StatisticsPage = async ({ params: { gameId } }: Props) => {
   let accuracy: number = 0;
 
   if (game.gameType === "mcq") {
-    let totalCorrect = game.questions.reduce((acc, question) => {
+    let totalCorrect = game.questions.reduce((acc: number, question) => {
       if (question.isCorrect) {
         return acc + 1;
       }
@@ -57,16 +65,18 @@ const StatisticsPage = async ({ params: { gameId } }: Props) => {
           </div>
         </div>
 
-        <div className="grid gap-4 mt-4 md:grid-cols-7">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">          
           <ResultsCard accuracy={accuracy} />
           <AccuracyCard accuracy={accuracy} />
           <TimeTakenCard
             timeEnded={new Date(game.timeEnded ?? 0)}
             timeStarted={new Date(game.timeStarted ?? 0)}
           />
+          </div>
         </div>
       </div>
-      ;
+      
     </>
   );
 };

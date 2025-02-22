@@ -29,7 +29,7 @@ const QuizMeCard = (props: Props) => {
           disableRipple
           className="relative overflow-visible rounded-full text-sm hover:-translate-y-1 shadow-xl bg-background/30 after:content-[''] after:absolute after:rounded-full 
           after:inset-0 after:bg-background/40 after:z-[-1] after:transition after:!duration-500 dark:text-white hover:after:opacity-0"
-        color='success'
+        color='secondary'
         variant='shadow'
         size='sm'
         onClick={()=> {
