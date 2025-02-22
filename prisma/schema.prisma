@@ -9,11 +9,11 @@ datasource db {
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(cuid()) @db.Char(36) 
   userId            String
   type              String
-  provider          String
-  providerAccountId String
+  provider          String @db.VarChar(191)
+  providerAccountId String @db.VarChar(191)
   refresh_token     String? @db.Text
   access_token      String? @db.Text
   expires_at        Int?
@@ -28,7 +28,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(cuid())  @db.Char(36) 
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -38,9 +38,9 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
+  id            String    @id @default(cuid()) @db.Char(36) 
+  name          String? 
+  email         String?   @unique @db.VarChar(191)
   emailVerified DateTime?
   image         String?
   games         Game[]
@@ -54,7 +54,7 @@ enum GameType {
 }
 
 model Game {
-  id          String     @id @default(cuid())
+  id          String     @id @default(cuid())  @db.Char(36) 
   userId      String
   timeStarted DateTime
   questions   Question[]
@@ -67,8 +67,8 @@ model Game {
 }
 
 model Question {
-  id                String   @id @default(cuid())
-  question          String
+  id                String   @id @default(cuid())  @db.Char(36) 
+  question          String  
   answer            String
   gameId            String
   options           Json?
