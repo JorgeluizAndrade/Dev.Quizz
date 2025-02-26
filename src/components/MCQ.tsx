@@ -10,11 +10,11 @@ import {
   button,
 } from "@nextui-org/react";
 import { Game, Question } from "@prisma/client";
-import { ChevronRight, LineChart, Timer } from "lucide-react";
+import { ChevronRight, Timer, RefreshCw } from "lucide-react";
 import React from "react";
 import { differenceInSeconds } from "date-fns";
 import MCQCounter from "./MCQCounter";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { z } from "zod";
 import { checkAnswerSchema, endGameSchema } from "@/schemas/getQuestionsSchema";
@@ -27,7 +27,7 @@ type Props = {
 
 const MCQ = ({ game }: Props) => {
   const [questionIndex, setQuestionIndex] = React.useState(0);
-  const [selectedChoice, setSelectedChoice] = React.useState<number>(0);
+  const [selectedChoice, setSelectedChoice] = React.useState<number>(-1);
   const [correctAnswer, setCorrectAnswer] = React.useState<number>(0);
   const [wrongAnswer, setWrongAnswer] = React.useState<number>(0);
   const [hasEnded, setHasEnded] = React.useState<boolean>(false);
@@ -39,7 +39,7 @@ const MCQ = ({ game }: Props) => {
       if (!hasEnded) {
         setNow(new Date());
       }
-    }, 10);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [hasEnded]);
@@ -107,8 +107,8 @@ const MCQ = ({ game }: Props) => {
           setWrongAnswer((prev) => prev + 1);
         }
         if (questionIndex == game.questions.length - 1) {
-          await endGame();
           setHasEnded(true);
+          await endGame();
           return;
         }
         setSelectedChoice(-1);
@@ -117,20 +117,33 @@ const MCQ = ({ game }: Props) => {
     });
   }, [checkAnswer, isChecking, game.questions.length, questionIndex, endGame]);
 
-  
   if (hasEnded) {
     return (
       <div className="absolute flex flex-col items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="px-4 mt-3 font-bold text-white bg-green-500 rounded-md whitespace-nowrap">
-          You completed in:{" "}
-          {timeDelta(differenceInSeconds(now, game.timeStarted))}
-        </div>
-        <MCQCounter correctAnswers={correctAnswer} wrongAnswers={wrongAnswer} />
-        <Link href={"/"} className={cn(button(), "mt-2")}>
-          Go black to dashboard
-        </Link>
+        <Card className="w-full max-w-md">
+          <CardBody className="text-center">
+            <h2 className="text-2xl font-bold mb-4">Quiz Completed!</h2>
+            <div className="mb-4 font-semibold text-green-600">
+              Time taken: {timeDelta(differenceInSeconds(now, game.timeStarted))}
+            </div>
+            <MCQCounter correctAnswers={correctAnswer} wrongAnswers={wrongAnswer} />
+            <div className="flex justify-center space-x-4 mt-6">
+              <Button
+                color="primary"
+                variant="solid"
+                onClick={() => window.location.reload()}
+                startContent={<RefreshCw size={18} />}
+              >
+                Play Again
+              </Button>
+              <Button color="secondary" variant="bordered" as="a" href="/">
+                Back to Dashboard
+              </Button>
+            </div>
+          </CardBody>
+        </Card>
       </div>
-    );
+    )
   }
 
   return (
@@ -177,8 +190,9 @@ const MCQ = ({ game }: Props) => {
           return (
             <Button
               color={selectedChoice === index ? "primary" : "default"}
-              variant="ghost"
+              variant={selectedChoice === index ? "solid" : "bordered"}
               onClick={() => setSelectedChoice(index)}
+              disabled={isChecking}
               className="justify-start w-full py-8 mb-4"
               key={index}
             >
@@ -197,12 +211,12 @@ const MCQ = ({ game }: Props) => {
           handleNext();
         }}
         isLoading={isChecking}
-        disabled={isChecking}
+        disabled={isChecking || selectedChoice === -1}       
         color="success"
         variant="ghost"
         className="mt-2"
       >
-        Next
+        {questionIndex === game.questions.length - 1 ? "Finish" : "Next"}
         <ChevronRight className="w-4 h-4 ml-2" />
       </Button>
     </div>
