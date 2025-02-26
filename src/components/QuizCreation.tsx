@@ -141,17 +141,6 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                   )}
                 />
 
-                {/* <Select
-                  isRequired
-                  className="max-w-xs"
-                  label="Enter a topic"
-                  placeholder="Programming Language or Framework "
-                >
-                  {tech.map((animal) => (
-                    <SelectItem key={animal.key}>{animal.label}</SelectItem>
-                  ))}
-                </Select> */}
-
                 <Input
                   {...form.control}
                   name="amount"
