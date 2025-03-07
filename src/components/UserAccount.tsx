@@ -10,13 +10,13 @@ import {
   User as NextUIUser,
 } from "@nextui-org/react";
 import { signOut } from "next-auth/react";
+import { ExternalLink } from "lucide-react";
 
 type Props = {
   user: Pick<User, "name" | "email" | "image">;
 };
 
 const UserAccount = ({ user }: Props) => {
-
   return (
     <div className="flex items-center gap-4">
       <Dropdown placement="bottom-start">
@@ -37,21 +37,26 @@ const UserAccount = ({ user }: Props) => {
             <p className="font-bold">Signed in as</p>
             <p className="font-bold">{user.email}</p>
           </DropdownItem>
-          <DropdownItem key="configurations">Wowww</DropdownItem>
-          <DropdownItem key="help_and_feedback">
-            <a href="https://www.linkedin.com/in/jorge-andradesouza/">
-              Help & Feedback
+          <DropdownItem key="contact_and_feedback">
+            <a
+              href="https://www.linkedin.com/in/jorge-andradesouza/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center cursor-pointer"
+            >
+              <ExternalLink className="mr-2 h-4 w-4" />
+              <span>Contact & Feedback</span>
             </a>
           </DropdownItem>
           <DropdownItem
             key="logout"
             color="danger"
             onClick={(e) => {
-                e.preventDefault()
+              e.preventDefault();
               signOut().catch(console.error);
             }}
           >
-            Log Out 
+            Log Out
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

@@ -21,9 +21,8 @@ const RecentActivities = async (props: Props) => {
   return (
     <RecentActivitiesComponents 
     header={"Your Recent Activities"}
-    text={`You have played a total of ${game_count} games`}
   >
-    <HistoryComponent limit={6} userId={session.user.id} />
+    <HistoryComponent limit={8} userId={session.user.id} />
   </RecentActivitiesComponents>
   );
 };
