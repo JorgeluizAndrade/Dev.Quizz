@@ -1,3 +1,4 @@
+import PixModal from "@/components/PixModal";
 import AnimatedTextWord from "@/components/Ui/AnimatedTextWord";
 import HistoryCard from "@/components/dashboard/HistoryCard";
 import LearnMore from "@/components/dashboard/LearnMore";
@@ -42,6 +43,9 @@ const Dashboard = async (props: Props) => {
           <RecentActivities />
         </div>
       </section>
+      <div>
+        <PixModal />
+      </div>
     </main>
   );
 };
