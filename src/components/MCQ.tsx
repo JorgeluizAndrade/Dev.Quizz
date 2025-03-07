@@ -7,6 +7,7 @@ import {
   CardHeader,
   Chip,
   Link,
+  Tooltip,
   button,
 } from "@nextui-org/react";
 import { Game, Question } from "@prisma/client";
@@ -33,7 +34,6 @@ const MCQ = ({ game }: Props) => {
   const [hasEnded, setHasEnded] = React.useState<boolean>(false);
   const [now, setNow] = React.useState<Date>(new Date());
 
-  
   React.useEffect(() => {
     const interval = setInterval(() => {
       if (!hasEnded) {
@@ -43,7 +43,7 @@ const MCQ = ({ game }: Props) => {
 
     return () => clearInterval(interval);
   }, [hasEnded]);
-  
+
   const currentQuestion = React.useMemo(() => {
     return game.questions[questionIndex];
   }, [questionIndex, game.questions]);
@@ -66,7 +66,7 @@ const MCQ = ({ game }: Props) => {
       return response.data;
     },
   });
-  
+
   const { mutateAsync: endGame } = useMutation({
     mutationFn: async () => {
       const payload: z.infer<typeof endGameSchema> = {
@@ -124,18 +124,34 @@ const MCQ = ({ game }: Props) => {
           <CardBody className="text-center">
             <h2 className="text-2xl font-bold mb-4">Quiz Completed!</h2>
             <div className="mb-4 font-semibold text-green-600">
-              Time taken: {timeDelta(differenceInSeconds(now, game.timeStarted))}
+              Time taken:{" "}
+              {timeDelta(differenceInSeconds(now, game.timeStarted))}
             </div>
-            <MCQCounter correctAnswers={correctAnswer} wrongAnswers={wrongAnswer} />
+            <MCQCounter
+              correctAnswers={correctAnswer}
+              wrongAnswers={wrongAnswer}
+            />
             <div className="flex justify-center space-x-4 mt-6">
-              <Button
-                color="primary"
-                variant="solid"
-                onClick={() => window.location.reload()}
-                startContent={<RefreshCw size={18} />}
+              <Tooltip
+                content={
+                  <div className="px-1 py-2">
+                    <div className="text-small font-bold">Tip</div>
+                    <div className="text-tiny">
+                      If you want to play again, get your notebook and write down your the mistakes.
+                    </div>
+                  </div>
+                }
               >
-                Play Again
-              </Button>
+                <Button
+                  color="primary"
+                  variant="solid"
+                  onClick={() => window.location.reload()}
+                  startContent={<RefreshCw size={18} />}
+                >
+                  Play Again
+                </Button>
+              </Tooltip>
+
               <Button color="secondary" variant="bordered" as="a" href="/">
                 Back to Dashboard
               </Button>
@@ -143,7 +159,7 @@ const MCQ = ({ game }: Props) => {
           </CardBody>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -211,7 +227,7 @@ const MCQ = ({ game }: Props) => {
           handleNext();
         }}
         isLoading={isChecking}
-        disabled={isChecking || selectedChoice === -1}       
+        disabled={isChecking || selectedChoice === -1}
         color="success"
         variant="ghost"
         className="mt-2"
