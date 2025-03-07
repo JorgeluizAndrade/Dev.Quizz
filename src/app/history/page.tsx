@@ -20,8 +20,8 @@ const HistoryPage = async (props: Props) => {
       <RecentActivitiesComponents 
     header={"History"}
     text={
-        <Link className='text-white bg-gray-700 rounded-md p-2 text-lg ' href="/dashboard">
-        <LayoutDashboard className="mr-2" />
+        <Link className='text-white bg-gray-700 rounded-md  text-lg ' href="/dashboard">
+        <LayoutDashboard className="mr-1" />
         Back to Dashboard
       </Link>
     }
