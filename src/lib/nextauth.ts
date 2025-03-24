@@ -57,6 +57,6 @@ export const authOptions: NextAuthOptions = {
   ]
 };
 
-export const getAuthSession = () => {
-  return getServerSession(authOptions)
+export const getAuthSession = async () => {
+  return await getServerSession(authOptions)
 }

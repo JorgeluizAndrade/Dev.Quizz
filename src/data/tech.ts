@@ -1,4 +1,7 @@
 export const tech = [
+  { key: "algorithm", label: "Algorithms" },
+  { key: "data structures", label: "Data Structures" },
+  { key: "design system", label: "Design System" },
   { key: "javascript", label: "JavaScript" },
   { key: "typescript", label: "TypeScript" },
   { key: "python", label: "Python" },
