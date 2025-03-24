@@ -7,14 +7,13 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import type { Metadata } from "next";
-
+import WrongAnswer from "@/components/ViewAnswers";
 
 type Props = {
   params: {
     gameId: string;
   };
 };
-
 
 export const metadata: Metadata = {
   title: "Statistic | Dev.Quizz",
@@ -36,6 +35,15 @@ const StatisticsPage = async ({ params: { gameId } }: Props) => {
   if (!game) {
     redirect("/");
   }
+
+  const wrongsAnswer = await prisma.game.findUnique({
+    where: { id: gameId },
+    select: {
+      questions: {
+        select: { question: true, answer:true ,isCorrect: true, userAnswer: true },
+      },
+    },
+  });
 
   let accuracy: number = 0;
 
@@ -66,17 +74,21 @@ const StatisticsPage = async ({ params: { gameId } }: Props) => {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">          
-          <ResultsCard accuracy={accuracy} />
-          <AccuracyCard accuracy={accuracy} />
-          <TimeTakenCard
-            timeEnded={new Date(game.timeEnded ?? 0)}
-            timeStarted={new Date(game.timeStarted ?? 0)}
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+            <ResultsCard accuracy={accuracy} />
+            <AccuracyCard accuracy={accuracy} />
+            <TimeTakenCard
+              timeEnded={new Date(game.timeEnded ?? 0)}
+              timeStarted={new Date(game.timeStarted ?? 0)}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="space-y-4">
+          <WrongAnswer wrongsAnswer={wrongsAnswer} />
           </div>
         </div>
       </div>
-      
     </>
   );
 };
