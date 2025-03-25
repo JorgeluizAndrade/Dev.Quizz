@@ -4,10 +4,12 @@ import { quizCreationSchema } from "@/schemas/form/quiz";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import axios from "axios";
-export async function POST(req: Request, res: Response) {
+export async function POST(req: NextResponse, res: NextResponse) {
 
   try {
     const session = await getAuthSession();
+    console.log("IN GAME Session data:", session);
+
     if (!session?.user) {
       return NextResponse.json(
         {
@@ -29,11 +31,18 @@ export async function POST(req: Request, res: Response) {
       },
     });
     const { data } = await axios.post(
-      `${process.env.API_URL as string}/api/questions`, 
+      `${process.env.API_URL as string}/api/questions`,
       {
         topic,
         amount,
         type,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          Cookie: req.headers.get("cookie") || "",        
+        }
+
       }
     );
     if (type === "mcq") {

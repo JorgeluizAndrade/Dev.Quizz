@@ -1,21 +1,22 @@
 import { strict_output } from "@/lib/gpt";
 import { getQuestionsSchema } from "@/schemas/getQuestionsSchema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { getAuthSession } from "@/lib/nextauth";
 
-export async function POST(req: Request, res: Response) {
+
+export async function POST(req: NextRequest, res: NextResponse) {
   try {
-        const session = await getAuthSession();
-        console.log("Session data:", session);
-        if (!session?.user) {
-          return NextResponse.json(
-            {
-              error: "You must be logged in",
-            },
-            { status: 401 }
-          );
-        }
+    const session = await getAuthSession();
+
+    if (!session) {
+      return NextResponse.json(
+        {
+          error: "You must be logged in",
+        },
+        { status: 401 }
+      );
+    }
 
     const body = await req.json();
     const { amount, topic, type } = getQuestionsSchema.parse(body);
