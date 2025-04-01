@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import Navabar from '@/components/Navabar'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,12 +21,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-    <body className={cn(inter.className, "antialiased min-h-screen pt-16")}>
+    <html lang="en" className='h-full'>
+      <body className={cn(inter.className, "antialiased min-h-screen flex flex-col")}>
         <Providers>
-         <Navabar />
-             {children}
-        <ToastContainer
+          {/* Fixed navbar with padding to push content down */}
+          <Navabar />
+
+          {/* Main content with flex-grow to push footer down */}
+          <main className="flex-grow pt-16">{children}</main>
+
+          <ToastContainer
             position="top-center"
             autoClose={5000}
             hideProgressBar={false}
@@ -36,9 +41,12 @@ export default function RootLayout({
             draggable
             pauseOnHover
             theme="light"
-            /> 
+          />
+
+          {/* Footer at the bottom */}
+          <Footer />
         </Providers>
-        </body>
+      </body>
     </html>
   )
 }

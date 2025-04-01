@@ -40,7 +40,12 @@ const StatisticsPage = async ({ params: { gameId } }: Props) => {
     where: { id: gameId },
     select: {
       questions: {
-        select: { question: true, answer:true ,isCorrect: true, userAnswer: true },
+        select: {
+          question: true,
+          answer: true,
+          isCorrect: true,
+          userAnswer: true,
+        },
       },
     },
   });
@@ -85,7 +90,7 @@ const StatisticsPage = async ({ params: { gameId } }: Props) => {
         </div>
         <div>
           <div className="space-y-4">
-          <WrongAnswer wrongsAnswer={wrongsAnswer} />
+            <WrongAnswer wrongsAnswer={wrongsAnswer} />
           </div>
         </div>
       </div>

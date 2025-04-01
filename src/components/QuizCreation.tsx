@@ -14,11 +14,11 @@ import {
 import { BookOpen, CopyCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { ZodError, z } from "zod";
+import {  z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { MutationCache, useMutation } from "@tanstack/react-query";
+import {  useMutation } from "@tanstack/react-query";
 import LoadingRadar from "./LoadingRadar";
 import { toast } from "react-toastify";
 import { tech } from "@/data/tech";
@@ -109,7 +109,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
   }
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div className="flex justify-center items-center min-h-[calc(100vh-16rem)]">
       <Card>
         <CardHeader className="flex items-center flex-col">
           <h2 className="text-2xl font-bold">Quiz Creation</h2>
