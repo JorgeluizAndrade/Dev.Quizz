@@ -8,8 +8,7 @@ export async function POST(req: NextResponse, res: NextResponse) {
 
   try {
     const session = await getAuthSession();
-    console.log("IN GAME Session data:", session);
-
+    
     if (!session?.user) {
       return NextResponse.json(
         {

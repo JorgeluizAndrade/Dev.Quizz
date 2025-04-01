@@ -17,7 +17,9 @@ const QuizMeCard = (props: Props) => {
     initial={{ opacity: 0, y: 100 }}
     animate={{ opacity: 1, y: 0 }}
     >
-   <Card className=''
+   <Card 
+   fullWidth
+   className=''
    >
     <CardHeader className='flex flex-row items-center justify-between pb-2 space-y-0'>
        <h2 className='text-2xl font-bold'>Quizz Me.</h2>
