@@ -8,7 +8,7 @@ export async function POST(req: NextResponse, res: NextResponse) {
 
   try {
     const session = await getAuthSession();
-    
+
     if (!session?.user) {
       return NextResponse.json(
         {
@@ -29,6 +29,29 @@ export async function POST(req: NextResponse, res: NextResponse) {
         topic,
       },
     });
+
+
+    generateQuestions(req, game.id, topic, amount, type, session.user.id)
+
+
+    return NextResponse.json({ gameId: game.id }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json({ error: error.issues }, { status: 400 });
+    } else {
+      console.log(error)
+      return NextResponse.json(
+        { error: "An unexpected error occurred." },
+        { status: 500 }
+      );
+    }
+  }
+}
+
+
+async function generateQuestions(req: NextResponse, gameId: string, topic: string, amount: number, type: string, userId: string) {
+
+  try {
     const { data } = await axios.post(
       `${process.env.API_URL as string}/api/questions`,
       {
@@ -39,11 +62,11 @@ export async function POST(req: NextResponse, res: NextResponse) {
       {
         withCredentials: true,
         headers: {
-          Cookie: req.headers.get("cookie") || "",        
+          Cookie: req.headers.get("cookie") || "",
         }
-
       }
     );
+
     if (type === "mcq") {
       type mcqQuestion = {
         question: string;
@@ -63,7 +86,7 @@ export async function POST(req: NextResponse, res: NextResponse) {
           question: question.question,
           answer: question.answer,
           options: JSON.stringify(options),
-          gameId: game.id,
+          gameId: gameId,
           questionType: "mcq",
         };
       });
@@ -82,29 +105,18 @@ export async function POST(req: NextResponse, res: NextResponse) {
         return {
           question: question.question,
           answer: question.answer,
-          gameId: game.id,
+          gameId: gameId,
           questionType: "open_ended",
         }
       })
 
       await prisma.question.createMany({ data: open_endedQuestion });
     }
-
-    return NextResponse.json({ gameId: game.id }, { status: 200 });
   } catch (error) {
-    if (error instanceof ZodError) {
-      return NextResponse.json({ error: error.issues }, { status: 400 });
-    } else {
-      console.log(error)
-      return NextResponse.json(
-        { error: "An unexpected error occurred." },
-        { status: 500 }
-      );
-    }
+    console.error(` Error to generate questions game ${gameId}:`, error);
   }
+
 }
-
-
 export async function GET(req: Request, res: Response) {
   try {
     const url = new URL(req.url);
