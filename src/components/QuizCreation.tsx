@@ -40,10 +40,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
     },
   });
 
-  const validateTopic = (tpc: string) => {
-    return true;
-  };
-
+  
   const form = useForm<Input>({
     resolver: zodResolver(quizCreationSchema),
     defaultValues: {
@@ -53,12 +50,8 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
     },
   });
 
-  const isTopicInvalid = (topic: string) => {
-    if (topic.length >= 4) {
-      return !validateTopic(topic);
-    }
-    return true;
-  };
+
+  
 
   const onSubmit = async (input: Input) => {
     setShowLoader(true);
@@ -70,14 +63,13 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
       },
       {
         onSuccess: ({ gameId }: { gameId: string }) => {
-          setFinishedLoading(true);
-          const timeOut = setTimeout(() => {
+            const timeOut = setTimeout(() => {
             if (form.getValues("type") === "open_ended") {
               router.push(`/play/open-ended/${gameId}`);
             } else if (form.getValues("type") === "mcq") {
               router.push(`/play/mcq/${gameId}`);
             }
-          }, 2000);
+          }, 20000);
           return () => clearTimeout(timeOut);
         },
         onError: (error) => {
@@ -104,7 +96,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
   form.watch();
 
 
-  if (showLoader) {
+  if (showLoader) { 
     return <LoadingRadar finished={finishedLoading} />;
   }
 
@@ -152,7 +144,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                   }}
                   defaultValue="3"
                   min="1"
-                  max="10"
+                  max="4"
                 />
               </div>
               <Controller
