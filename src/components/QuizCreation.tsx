@@ -67,16 +67,28 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
           }, 20000);
 
           const interval = setInterval( async () => {
+            try{
             const res = await fetch(`/api/game?gameId=${gameId}`);
+            
+            if(!res.ok){
+              console.warn(`Falha ao buscar gameId=${gameId}`, await res.text());
+              return;
+            }
+            
             const { game } = await res.json();
-      
+
             if (game.questions.length >= input.amount) {
               clearInterval(interval);
               clearTimeout(timer);
               if(!finished) setFinishedLoading(true);
               router.push(`/play/${form.getValues("type")}/${gameId}`);
             }
+          } catch(error){
+            console.error("error:", error);
+
+          }
           }, 3000);
+          
         },
         onError: (error) => {
           setShowLoader(false);

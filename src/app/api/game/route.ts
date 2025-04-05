@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/db";
 import { getAuthSession } from "@/lib/nextauth";
 import { quizCreationSchema } from "@/schemas/form/quiz";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import axios from "axios";
-export async function POST(req: NextResponse, res: NextResponse) {
+export async function POST(req: NextRequest, res: NextResponse) {
 
   try {
     const session = await getAuthSession();
@@ -20,6 +20,9 @@ export async function POST(req: NextResponse, res: NextResponse) {
     const body = await req.json();
 
     const { amount, topic, type } = quizCreationSchema.parse(body);
+
+    // console.log("POST /api/game", body);
+
 
     const game = await prisma.game.create({
       data: {
@@ -49,7 +52,7 @@ export async function POST(req: NextResponse, res: NextResponse) {
 }
 
 
-async function generateQuestions(req: NextResponse, gameId: string, topic: string, amount: number, type: string, userId: string) {
+async function generateQuestions(req: NextRequest, gameId: string, topic: string, amount: number, type: string, userId: string) {
 
   try {
     const { data } = await axios.post(
@@ -149,9 +152,6 @@ export async function GET(req: Request, res: Response) {
 
     return NextResponse.json(
       { game },
-      {
-        status: 400,
-      }
     );
   } catch (error) {
     return NextResponse.json(
