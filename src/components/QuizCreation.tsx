@@ -64,7 +64,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
           const timer = setTimeout(() => {
             setFinishedLoading(true);
             finished = true;
-          }, 40000);
+          }, 20000);
 
           const interval = setInterval( async () => {
             const res = await fetch(`/api/game?gameId=${gameId}`);
@@ -146,9 +146,9 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                   onChange={(e) => {
                     form.setValue("amount", parseInt(e.target.value));
                   }}
-                  defaultValue="5"
+                  defaultValue="3"
                   min="1"
-                  max="5"
+                  max="3"
                 />
               </div>
               <Controller
