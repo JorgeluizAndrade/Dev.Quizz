@@ -87,7 +87,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
             console.error("error:", error);
 
           }
-          }, 3000);
+          }, 20000);
           
         },
         onError: (error) => {
@@ -187,6 +187,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                           ? "success"
                           : "default"
                       }
+                      disabled
                       className="w-1/2 rounded-none rounded-r-lg"
                       onClick={() => form.setValue("type", "open_ended")}
                       type="button"
