@@ -14,11 +14,11 @@ import {
 import { BookOpen, CopyCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import {  z } from "zod";
+import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import {  useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import LoadingRadar from "./LoadingRadar";
 import { toast } from "react-toastify";
 import { tech } from "@/data/tech";
@@ -40,7 +40,6 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
     },
   });
 
-  
   const form = useForm<Input>({
     resolver: zodResolver(quizCreationSchema),
     defaultValues: {
@@ -50,8 +49,6 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
     },
   });
 
-
-  
 
   const onSubmit = async (input: Input) => {
     setShowLoader(true);
@@ -63,14 +60,23 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
       },
       {
         onSuccess: ({ gameId }: { gameId: string }) => {
-            const timeOut = setTimeout(() => {
-            if (form.getValues("type") === "open_ended") {
-              router.push(`/play/open-ended/${gameId}`);
-            } else if (form.getValues("type") === "mcq") {
-              router.push(`/play/mcq/${gameId}`);
+          let finished = false;
+          const timer = setTimeout(() => {
+            setFinishedLoading(true);
+            finished = true;
+          }, 40000);
+
+          const interval = setInterval( async () => {
+            const res = await fetch(`/api/game?gameId=${gameId}`);
+            const { game } = await res.json();
+      
+            if (game.questions.length >= input.amount) {
+              clearInterval(interval);
+              clearTimeout(timer);
+              if(!finished) setFinishedLoading(true);
+              router.push(`/play/${form.getValues("type")}/${gameId}`);
             }
-          }, 20000);
-          return () => clearTimeout(timeOut);
+          }, 3000);
         },
         onError: (error) => {
           setShowLoader(false);
@@ -95,8 +101,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
 
   form.watch();
 
-
-  if (showLoader) { 
+  if (showLoader) {
     return <LoadingRadar finished={finishedLoading} />;
   }
 
@@ -117,8 +122,8 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                   control={form.control}
                   render={({ field }) => (
                     <Select
-                    {...field}
-                      isRequired 
+                      {...field}
+                      isRequired
                       name="topic"
                       variant="underlined"
                       className="max-w-xs"
@@ -128,7 +133,6 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                       {tech.map((tech) => (
                         <SelectItem key={tech.key}>{tech.label}</SelectItem>
                       ))}
-                      
                     </Select>
                   )}
                 />
@@ -142,9 +146,9 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                   onChange={(e) => {
                     form.setValue("amount", parseInt(e.target.value));
                   }}
-                  defaultValue="3"
+                  defaultValue="5"
                   min="1"
-                  max="4"
+                  max="5"
                 />
               </div>
               <Controller
