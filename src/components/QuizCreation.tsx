@@ -8,6 +8,7 @@ import {
   CardHeader,
   Divider,
   Input,
+  Link,
   Select,
   SelectItem,
 } from "@nextui-org/react";
@@ -33,6 +34,8 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
   const router = useRouter();
   const [showLoader, setShowLoader] = React.useState(false);
   const [finishedLoading, setFinishedLoading] = React.useState(false);
+  const [gameId, setGameId] = React.useState<string | null>(null);
+
   const { mutateAsync: getQuestions, isLoading } = useMutation({
     mutationFn: async ({ amount, topic, type }: Input) => {
       const response = await axios.post("/api/game", { amount, topic, type });
@@ -49,7 +52,6 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
     },
   });
 
-
   const onSubmit = async (input: Input) => {
     setShowLoader(true);
     getQuestions(
@@ -60,35 +62,37 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
       },
       {
         onSuccess: ({ gameId }: { gameId: string }) => {
+          setGameId(gameId);
           let finished = false;
           const timer = setTimeout(() => {
             setFinishedLoading(true);
             finished = true;
           }, 20000);
 
-          const interval = setInterval( async () => {
-            try{
-            const res = await fetch(`/api/game?gameId=${gameId}`);
-            
-            if(!res.ok){
-              console.warn(`Falha ao buscar gameId=${gameId}`, await res.text());
-              return;
-            }
-            
-            const { game } = await res.json();
+          const interval = setInterval(async () => {
+            try {
+              const res = await fetch(`/api/game?gameId=${gameId}`);
 
-            if (game.questions.length >= input.amount) {
-              clearInterval(interval);
-              clearTimeout(timer);
-              if(!finished) setFinishedLoading(true);
-              router.push(`/play/${form.getValues("type")}/${gameId}`);
-            }
-          } catch(error){
-            console.error("error:", error);
+              if (!res.ok) {
+                console.warn(
+                  `Falha ao buscar gameId=${gameId}`,
+                  await res.text()
+                );
+                return;
+              }
 
-          }
+              const { game } = await res.json();
+
+              if (game.questions.length >= input.amount) {
+                clearInterval(interval);
+                clearTimeout(timer);
+                if (!finished) setFinishedLoading(true);
+                router.push(`/play/${form.getValues("type")}/${gameId}`);
+              }
+            } catch (error) {
+              console.error("error:", error);
+            }
           }, 20000);
-          
         },
         onError: (error) => {
           setShowLoader(false);
@@ -114,7 +118,30 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
   form.watch();
 
   if (showLoader) {
-    return <LoadingRadar finished={finishedLoading} />;
+    return (
+      <div>
+        <LoadingRadar finished={finishedLoading} />
+        {finishedLoading ? (
+          <div className="flex flex-col justify-center items-center gap-4 mt-6 animate-fade-in">
+            <p className="text-lg text-gray-600">Your quiz is ready!</p>
+            <Link href={`/play/${form.getValues("type")}/${gameId}`}>
+              <Button
+                color="success"
+                size="lg"
+                radius="full"
+                className="px-8 shadow-md hover:scale-105 transition-transform duration-300"
+              >
+                🎮 Start Playing
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <p className="mt-6 text-gray-500 text-lg animate-pulse">
+            Generating your quiz, please wait...
+          </p>
+        )}
+      </div>
+    );
   }
 
   return (
