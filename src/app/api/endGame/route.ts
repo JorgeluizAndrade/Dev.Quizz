@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import  prisma  from "@/lib/db";
 import { endGameSchema } from "@/schemas/getQuestionsSchema";
 import { NextResponse } from "next/server";
 

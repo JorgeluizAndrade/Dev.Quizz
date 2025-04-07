@@ -1,7 +1,7 @@
 import AccuracyCard from "@/components/statistics/AccuracyCard";
 import ResultsCard from "@/components/statistics/ResultsCard";
 import TimeTakenCard from "@/components/statistics/TimeTakenCard";
-import { prisma } from "@/lib/db";
+import  prisma  from "@/lib/db";
 import { getAuthSession } from "@/lib/nextauth";
 import Link from "next/link";
 import { redirect } from "next/navigation";

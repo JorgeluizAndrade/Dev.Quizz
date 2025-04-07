@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import  prisma  from "@/lib/db";
 import { Card, CardBody } from "@nextui-org/react";
 import { Badge, BarChart2, BookOpen, Calendar, Clock, CopyCheck, Trophy } from "lucide-react";
 import Link from "next/link";
@@ -20,6 +20,7 @@ const HistoryComponent = async ({ limit, userId }: Props) => {
     orderBy: {
       timeStarted: "desc",
     },
+    cacheStrategy: { swr: 300, ttl: 600 },
   });
 
   const totalGames = games.length

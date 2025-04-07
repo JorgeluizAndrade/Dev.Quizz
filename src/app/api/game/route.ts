@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import  prisma  from "@/lib/db";
 import { getAuthSession } from "@/lib/nextauth";
 import { quizCreationSchema } from "@/schemas/form/quiz";
 import { NextRequest, NextResponse } from "next/server";
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         userId: session.user.id,
         topic,
       },
+      
     });
 
 
@@ -140,6 +141,7 @@ export async function GET(req: Request, res: Response) {
       include: {
         questions: true,
       },
+      cacheStrategy: { swr: 60, ttl: 120 }
     });
     if (!game) {
       return NextResponse.json(

@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import prisma  from "@/lib/db";
 import { checkAnswerSchema } from "@/schemas/getQuestionsSchema";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
@@ -13,6 +13,7 @@ export async function POST(req: Request, res: Response) {
       where: {
         id: questionId,
       },
+      cacheStrategy: { ttl: 100 }
     });
 
     if (!question) {

@@ -2,7 +2,7 @@ import React from "react";
 import RecentActivitiesComponents from "../RecentActivitiesComponent";
 import { getAuthSession } from "@/lib/nextauth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/db";
+import prisma  from "@/lib/db";
 import HistoryComponent from "../HistoryComponent";
 import { ExternalLink } from "lucide-react";
 
