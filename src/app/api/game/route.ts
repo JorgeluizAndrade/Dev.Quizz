@@ -24,6 +24,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     // console.log("POST /api/game", body);
 
 
+    
+
+
     const game = await prisma.game.create({
       data: {
         gameType: type,
@@ -35,7 +38,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     });
 
 
-    generateQuestions(req, game.id, topic, amount, type, session.user.id)
+    
+
+    await generateQuestions(req, game.id, topic, amount, type, session.user.id)
 
 
     return NextResponse.json({ gameId: game.id }, { status: 200 });
