@@ -35,7 +35,8 @@ const MCQPage = async ({ params: { gameId } }: Props) => {
           options: true,
         }
       }
-    }
+    },
+    cacheStrategy: { ttl: 120 }
   })
 
   if (!game || game.gameType === "open_ended") {

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Providers } from '@/components/Providers'
 import { cn } from '@/lib/utils'
-import Navabar from '@/components/Navabar'
+import Navbar from '@/components/Navbar'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '@/components/Footer'
@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={cn(inter.className, "antialiased min-h-screen flex flex-col")}>
         <Providers>
           {/* Fixed navbar with padding to push content down */}
-          <Navabar />
+          <Navbar />
 
           {/* Main content with flex-grow to push footer down */}
           <main className="flex-grow pt-16">{children}</main>

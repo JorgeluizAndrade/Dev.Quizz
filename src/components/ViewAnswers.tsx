@@ -13,7 +13,7 @@ import {
 import { CheckCircle, HelpCircle, Info, XCircle, BookOpen, AlertOctagon } from "lucide-react";
 
 type Props = {
-  wrongsAnswer: {
+  answers: {
     questions: Pick<
       Question,
       "question" | "answer" | "isCorrect" | "userAnswer"
@@ -21,8 +21,8 @@ type Props = {
   } | null;
 };
 
-const ViewAnswers = ({ wrongsAnswer }: Props) => {
-  const hasQuestions = wrongsAnswer?.questions?.length;
+const ViewAnswers = ({ answers }: Props) => {
+  const hasQuestions = answers?.questions?.length;
 
   return (
     <div className="space-y-4">
@@ -53,7 +53,7 @@ const ViewAnswers = ({ wrongsAnswer }: Props) => {
         </Card>
       ) : (
         <div className="grid gap-4">
-          {wrongsAnswer.questions.map((question, index) => (
+          {answers.questions.map((question, index) => (
             <Card key={index} className="overflow-hidden">
               <CardHeader className="bg-muted/50 pb-3">
                 <h2 className="text-base font-medium">

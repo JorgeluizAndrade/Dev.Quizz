@@ -10,7 +10,7 @@ import MobileNav from "./MobileNav";
 
 type Props = {};
 
-const Navabar = async (props: Props) => {
+const Navbar = async (props: Props) => {
   const session = await getAuthSession();
   return (
     <header className="fixed inset-x-0 top-0 z-50 h-16 bg-white dark:bg-black border-b border-zinc-300 dark:border-zinc-700">
@@ -33,4 +33,4 @@ const Navabar = async (props: Props) => {
   );
 };
 
-export default Navabar;
+export default Navbar;

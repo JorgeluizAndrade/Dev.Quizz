@@ -7,7 +7,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import type { Metadata } from "next";
-import WrongAnswer from "@/components/ViewAnswers";
+import ViewAnswers from "@/components/ViewAnswers";
 
 type Props = {
   params: {
@@ -31,25 +31,13 @@ const StatisticsPage = async ({ params: { gameId } }: Props) => {
     include: {
       questions: true,
     },
+    cacheStrategy: { ttl: 300, swr: 60 }
   });
   if (!game) {
     redirect("/");
   }
 
-  const wrongsAnswer = await prisma.game.findUnique({
-    where: { id: gameId },
-    select: {
-      questions: {
-        select: {
-          question: true,
-          answer: true,
-          isCorrect: true,
-          userAnswer: true,
-        },
-      },
-    },
-  });
-
+  
   let accuracy: number = 0;
 
   if (game.gameType === "mcq") {
@@ -90,7 +78,7 @@ const StatisticsPage = async ({ params: { gameId } }: Props) => {
         </div>
         <div>
           <div className="space-y-4">
-            <WrongAnswer wrongsAnswer={wrongsAnswer} />
+            <ViewAnswers answers={game} />
           </div>
         </div>
       </div>

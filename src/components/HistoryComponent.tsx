@@ -20,7 +20,7 @@ const HistoryComponent = async ({ limit, userId }: Props) => {
     orderBy: {
       timeStarted: "desc",
     },
-    cacheStrategy: { swr: 300, ttl: 600 },
+    cacheStrategy: { swr: 30, ttl: 60 },
   });
 
   const totalGames = games.length
