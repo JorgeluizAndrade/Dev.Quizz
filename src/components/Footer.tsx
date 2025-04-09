@@ -3,7 +3,7 @@ import { Linkedin, Mail, MapPin } from "lucide-react"
 
 export default function Footer() {
   const companyName = "Dev.Quizz"
-  const developerName = "Jorge Luiz Andarade"
+  const developerName = "Jorge Luiz Andrade"
 
   return (
     <footer className="w-full border-t bg-background py-8 ">
