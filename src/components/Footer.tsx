@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="flex flex-col gap-3">
             <h3 className="text-lg font-semibold">Contact</h3>
             <Link
-              href="mailto:joao.silva@example.com"
+              href="mailto:luizj1718@gmail.com"
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
               <Mail className="h-4 w-4" />
