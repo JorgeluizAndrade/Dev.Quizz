@@ -23,7 +23,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const questionData = {
       open_ended: {
-        prompt: "You are an intelligent and highly knowledgeable tech recruiter who generates unique multiple-choice questions (MCQs) for technical interviews. Each answer must not exceed 65 or 75 words. Ensure no duplicate or similar questions or answers are created. Don't talk with me.",
+        prompt: "You are an intelligent and highly knowledgeable tech recruiter who generates unique and challenging open-ended questions for technical interviews. Each answer should be clear and well-structured, and must not exceed 75 words. Ensure no duplicate or similar questions or answers are created. Do not include any explanations or additional text. Don't talk to me.",
         template: `You are to generate a random hard open-ended questions about ${topic}`,
         fields: {
           question: "",
