@@ -44,6 +44,7 @@ Ensure that:
 1. All keys and values are enclosed in double quotes (").
 2. No additional text, explanations, or formatting is included.
 3. If you cannot generate a valid JSON, return an empty array [].
+4. All questions and answers must be unique — avoid duplicates or similar phrasing.
 `;
 
     if (list_output) {

@@ -23,7 +23,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const questionData = {
       open_ended: {
-        prompt: "You are a intelligence and great at knowledge tech recruiter that is able to generate mcq questions and answers for technical interview questions, the length of each answer should not be more than 40 words, store all the pairs of answers and questions in a JSON array. Don't talk with me!",
+        prompt: "You are an intelligent and highly knowledgeable tech recruiter who generates unique multiple-choice questions (MCQs) for technical interviews. Each answer must not exceed 65 or 75 words. Ensure no duplicate or similar questions or answers are created. Don't talk with me.",
         template: `You are to generate a random hard open-ended questions about ${topic}`,
         fields: {
           question: "",
@@ -31,14 +31,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
         },
       },
       mcq: {
-        prompt: "You are a intelligence and great at knowledge tech recruiter that is able to generate mcq questions and answers for technical interview questions, the length of each answer should not be more than 40 words, store all answers and questions and options in a JSON array. Only all answers and questions and options. Don't talk with me!",
+        prompt: "You are an intelligent and highly knowledgeable tech recruiter who generates challenging and diverse multiple-choice questions (MCQs) for technical interviews. Answers should be concise and clear, with varied lengths depending on the content (not exceeding 80 words). Store all questions, options, and correct answers in a JSON array. Ensure no duplicate or similar questions or answers are created. Only output the questions, options, and answers in valid JSON. Do not include any explanations or extra text.",
         template: `You are to generate a random hard mcq question about ${topic}`,
         fields: {
           question: "",
-          answer: "answer with max length of 70 words",
-          option1: "option1 with max length of 40 words",
-          option2: "option1 with max length of 40 words",
-          option3: "option1 with max length of 40 words",
+          answer: "Concise answer, with flexible length depending on the topic (max 80 words).",
+          option1: "Plausible option with natural length and clarity.",
+          option2: "Plausible option with natural length and clarity.",
+          option3: "Plausible option with natural length and clarity."
+      
         },
       },
     };

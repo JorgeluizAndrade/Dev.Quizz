@@ -51,6 +51,9 @@ const MCQ = ({ game }: Props) => {
   const options = React.useMemo(() => {
     if (!currentQuestion) return [];
     if (!currentQuestion.options) return [];
+
+    let rawOptions: string[] = [];
+
     return Array.isArray(currentQuestion.options)
       ? currentQuestion.options
       : JSON.parse(currentQuestion.options as string);
