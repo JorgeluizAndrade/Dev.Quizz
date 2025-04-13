@@ -212,8 +212,8 @@ const MCQ = ({ game }: Props) => {
               variant={selectedChoice === index ? "solid" : "bordered"}
               onClick={() => setSelectedChoice(index)}
               disabled={isChecking}
-              className="justify-start w-full py-8 mb-4"
-              key={index}
+              className="justify-start w-full px-6 py-10 mb-6 text-left whitespace-normal break-words text-lg"              key={index}
+              size="md"
             >
               <div className="flex items-center justify-start ">
                 <div className="p-2 px-3 mr-5 border rounded-md">
