@@ -2,10 +2,9 @@
 
 import { useState, useRef } from "react"
 import Image from "next/image"
-import { Copy, Check, X } from "lucide-react"
-import { Card, CardBody, CardHeader } from "@nextui-org/react"
-import { Button } from "@nextui-org/react"
-import { Tooltip } from "@nextui-org/react"
+import { Copy, Check, X, Coffee } from "lucide-react"
+import { Button, Card, CardBody, CardHeader, Tooltip } from "@nextui-org/react"
+import { motion, AnimatePresence } from "framer-motion"
 import qrcode from "../../public/qrcode.png"
 
 export default function PixModal() {
@@ -27,69 +26,86 @@ export default function PixModal() {
     }
   }
 
-  if (!isOpen) {
-    return (
-      <Button onClick={() => setIsOpen(true)} 
-      variant="shadow"
-      radius="md"
-        color="secondary"
-      className="fixed bottom-4 left-4 z-50 rounded-full shadow-lg">
-        Donate
-      </Button>
-    )
-  }
-
   return (
-    <div className="fixed bottom-4 left-4 z-50">
-      <Card className="w-72 shadow-lg">
-        <CardHeader className="pb-2 flex flex-row items-center justify-between">
-          <h2 className="text-lg">Contribute to the project</h2>
-          <Button variant="ghost" size="md" onClick={() => setIsOpen(false)}>
-            <X className="h-4 w-4" />
-          </Button>
-        </CardHeader>
-        <CardBody className="space-y-4">
-            <span className="text-sm text-blue-600">If you like to this project, support with your donated.</span>
-            <span className="top-3">Scan the QR Code with your  {` bank's `} app or copy the PIX key.</span>
-          <div className="flex justify-center">
-            <div className="relative w-48 h-48 bg-white p-2 border rounded-md">
-              <Image
-                src={qrcode}
-                alt="QR Code PIX"
-                fill
-                className="object-contain"
-              />
-            </div>
-          </div>
+    <>
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed bottom-4 left-4 z-50"
+          >
+            <Button
+              onClick={() => setIsOpen(true)}
+              className="rounded-full shadow-lg flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white"
+              size="md"
+            >
+              <Coffee className="h-4 w-4" />
+              Buy a coffee for developer
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          <div className="space-y-2 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="font-semibold">Chave PIX:</span>
-              <div className="flex items-center gap-1">
-                <span ref={pixKeyRef} className="text-sm">
-                  {pixData.email}
-                </span>
-                  <Tooltip>
-                      <Button variant="ghost" size="md" className="h-6 w-6" onClick={copyToClipboard}>
-                        {copied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
-                      </Button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{
+              duration: 0.25,
+              ease: [0.16, 1, 0.3, 1], // Custom ease curve for a more natural feel
+            }}
+            className="fixed bottom-4 left-4 z-50"
+          >
+            <Card className="w-72 shadow-lg border-2 border-amber-900">
+              <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                <h2 className="text-lg font-medium">Buy me a coffee</h2>
+                <Button variant="ghost" size="md" onClick={() => setIsOpen(false)} className="h-8 w-8">
+                  <X className="h-4 w-4" />
+                </Button>
+              </CardHeader>
+              <CardBody className="space-y-4 pt-0">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
+                  className="flex justify-center"
+                >
+                  <div className="relative w-48 h-48 bg-white p-2 border rounded-md">
+                    <Image src={qrcode || "/placeholder.svg"} alt="QR Code PIX" fill className="object-contain" />
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.3 }}
+                  className="flex items-center justify-between bg-amber-50 p-2 rounded-md"
+                >
+                  <span ref={pixKeyRef} className="text-sm font-medium text-amber-900 truncate max-w-[180px]">
+                    {pixData.email}
+                  </span>
+                  <Tooltip content={copied ? "Copied!" : "Copy PIX key"}>
+                    <Button variant="ghost" size="md" className="h-6 w-6" onClick={copyToClipboard}>
+                      <motion.div animate={copied ? { scale: [1, 1.2, 1] } : {}} transition={{ duration: 0.3 }}>
+                        {copied ? (
+                          <Check className="h-3 w-3 text-green-500" />
+                        ) : (
+                          <Copy className="h-3 w-3 text-amber-700" />
+                        )}
+                      </motion.div>
+                    </Button>
                   </Tooltip>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="font-semibold">Nome:</span>
-              <span>{pixData.nome}</span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="font-semibold">Banco:</span>
-              <span>{pixData.banco}</span>
-            </div>
-          </div>
-        </CardBody>
-      </Card>
-    </div>
+                </motion.div>
+              </CardBody>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
-
