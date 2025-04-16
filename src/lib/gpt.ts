@@ -15,7 +15,7 @@ export async function strict_output(
   output_format: OutputFormat,
   default_category: string = "",
   output_value_only: boolean = false,
-  model: string = "meta-llama/llama-3.3-70b-instruct:free",
+  model: string = "meta-llama/llama-4-maverick:free",
   temperature: number = 1,
   num_tries: number = 3,
   verbose: boolean = false
