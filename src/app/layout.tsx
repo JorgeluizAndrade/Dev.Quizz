@@ -24,10 +24,8 @@ export default function RootLayout({
     <html lang="en" className='h-full'>
       <body className={cn(inter.className, "antialiased min-h-screen flex flex-col")}>
         <Providers>
-          {/* Fixed navbar with padding to push content down */}
           <Navbar />
 
-          {/* Main content with flex-grow to push footer down */}
           <main className="flex-grow pt-16">{children}</main>
 
           <ToastContainer
