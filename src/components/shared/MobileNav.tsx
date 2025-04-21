@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
-import ThemeToggle from "./ThemeToggle"
-import UserAccount from "./UserAccount"
+import ThemeToggle from "@/components/ThemeToggle"
+import UserAccount from "@/components/UserAccount"
 import SignInButton from "./SignInButton"
 
 type MobileNavProps = {

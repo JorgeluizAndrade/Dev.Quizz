@@ -18,7 +18,7 @@ import MCQCounter from "./MCQCounter";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { z } from "zod";
-import { checkAnswerSchema, endGameSchema } from "@/schemas/getQuestionsSchema";
+import { checkAnswerSchemas, endGameSchema } from "@/features/quizz/schemas";
 import { toast } from "react-toastify";
 import { cn, timeDelta } from "@/lib/utils";
 
@@ -61,11 +61,11 @@ const MCQ = ({ game }: Props) => {
 
   const { mutateAsync: checkAnswer, isLoading: isChecking } = useMutation({
     mutationFn: async () => {
-      const payload: z.infer<typeof checkAnswerSchema> = {
+      const payload: z.infer<typeof checkAnswerSchemas> = {
         questionId: currentQuestion.id,
         userInput: options[selectedChoice],
       };
-      const response = await axios.post("/api/checkAnswer", payload);
+      const response = await axios.post("/api/quizz/checkAnswer", payload);
       return response.data;
     },
   });
@@ -75,7 +75,7 @@ const MCQ = ({ game }: Props) => {
       const payload: z.infer<typeof endGameSchema> = {
         gameId: game.id,
       };
-      const response = await axios.post(`/api/endGame`, payload);
+      const response = await axios.post(`/api/quizz/endGame`, payload);
       return response.data;
     },
   });
@@ -138,9 +138,10 @@ const MCQ = ({ game }: Props) => {
               <Tooltip
                 content={
                   <div className="px-1 py-2">
-                    <div className="text-small font-bold">Tip</div>
+                    <div className="text-small font-bold">Hint</div>
                     <div className="text-tiny">
-                      If you want to play again, get your notebook and write down your the mistakes.
+                      If you want to play again, get your notebook and write
+                      down your the mistakes.
                     </div>
                   </div>
                 }
@@ -149,7 +150,7 @@ const MCQ = ({ game }: Props) => {
                   color="primary"
                   variant="solid"
                   onClick={() => window.location.reload()}
-                  startContent={<RefreshCw size={18} />}
+                  startContent={<RefreshCw />}
                 >
                   Play Again
                 </Button>
@@ -157,6 +158,16 @@ const MCQ = ({ game }: Props) => {
 
               <Button color="secondary" variant="bordered" as="a" href="/">
                 Back to Dashboard
+              </Button>
+
+              <Button
+              as="a" 
+              href="/quiz" 
+              className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-neutral-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
+                  Another quizz 🧠
+                </span>
               </Button>
             </div>
           </CardBody>
@@ -212,7 +223,8 @@ const MCQ = ({ game }: Props) => {
               variant={selectedChoice === index ? "solid" : "bordered"}
               onClick={() => setSelectedChoice(index)}
               disabled={isChecking}
-              className="justify-start w-full px-6 py-10 mb-6 text-left whitespace-normal break-words text-lg"              key={index}
+              className="justify-start w-full px-6 py-10 mb-6 text-left whitespace-normal break-words text-lg"
+              key={index}
               size="md"
             >
               <div className="flex items-center justify-start ">

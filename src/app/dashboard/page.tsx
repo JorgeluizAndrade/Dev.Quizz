@@ -1,5 +1,5 @@
 import PixModal from "@/components/PixModal";
-import AnimatedTextWord from "@/components/Ui/AnimatedTextWord";
+import AnimatedTextWord from "@/components/ui/AnimatedTextWord";
 import Advice from "@/components/dashboard/DevAdvice";
 import LearnMore from "@/components/dashboard/LearnMore";
 import QuizMeCard from "@/components/dashboard/QuizMeCard";

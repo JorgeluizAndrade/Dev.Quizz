@@ -1,4 +1,4 @@
-import QuizCreation from "@/components/QuizCreation";
+import QuizCreation from "@/features/quizz/components/QuizCreation";
 import { getAuthSession } from "@/lib/nextauth";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";

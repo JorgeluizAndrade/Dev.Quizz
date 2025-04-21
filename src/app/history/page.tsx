@@ -1,5 +1,5 @@
-import HistoryComponent from '@/components/HistoryComponent';
-import RecentActivitiesComponents from '@/components/RecentActivitiesComponent';
+import HistoryComponent from '@/components/shared/HistoryComponent';
+import RecentActivitiesComponents from '@/components/shared/RecentActivitiesComponent';
 import { getAuthSession } from '@/lib/nextauth'
 import { LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';

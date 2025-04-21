@@ -1,7 +1,7 @@
 "use client";
 
 import { cn, timeDelta } from "@/lib/utils";
-import { checkAnswerSchema, endGameSchema } from "@/schemas/getQuestionsSchema";
+import { checkAnswerSchemas, endGameSchema } from "@/features/quizz/schemas";
 import { Button, Card, CardBody, CardHeader, Chip, button } from "@nextui-org/react";
 import { Game, Question } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
@@ -46,11 +46,11 @@ function OpenEnded({ game }: Props) {
           filledAnswer = filledAnswer.replace("_______", input.value)
           input.value = "";
       });
-      const payload: z.infer<typeof checkAnswerSchema> = {
+      const payload: z.infer<typeof checkAnswerSchemas> = {
         questionId: currentQuestion.id,
         userInput: filledAnswer,
       };
-      const response = await axios.post("/api/checkAnswer", payload);
+      const response = await axios.post("/api/quizz/checkAnswer", payload);
       return response.data;
     },
   });
@@ -60,7 +60,7 @@ function OpenEnded({ game }: Props) {
       const payload: z.infer<typeof endGameSchema> = {
         gameId: game.id,
       };
-      const response = await axios.post(`/api/endGame`, payload);
+      const response = await axios.post(`/api/quizz/endGame`, payload);
       return response.data;
     },
   });

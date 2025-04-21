@@ -1,4 +1,4 @@
-import MCQ from "@/components/MCQ";
+import MCQ from "@/components/game/MCQ";
 import  prisma  from "@/lib/db";
 import { getAuthSession } from "@/lib/nextauth";
 import { redirect } from "next/navigation";

@@ -1,6 +1,6 @@
 "use client";
 
-import { quizCreationSchema } from "@/schemas/form/quiz";
+import { quizCreationSchema } from "@/features/quizz/schemas";
 import {
   Button,
   Card,
@@ -20,7 +20,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
-import LoadingRadar from "./LoadingRadar";
+import LoadingRadar from "../../../components/LoadingRadar";
 import { toast } from "react-toastify";
 import { tech } from "@/data/tech";
 
@@ -38,7 +38,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
 
   const { mutateAsync: getQuestions, isLoading } = useMutation({
     mutationFn: async ({ amount, topic, type }: Input) => {
-      const response = await axios.post("/api/game", { amount, topic, type });
+      const response = await axios.post("/api/quizz/game", { amount, topic, type });
       return response.data;
     },
   });
@@ -71,7 +71,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
 
           const interval = setInterval(async () => {
             try {
-              const res = await fetch(`/api/game?gameId=${gameId}`);
+              const res = await fetch(`/api/quizz/game?gameId=${gameId}`);
 
               if (!res.ok) {
                 console.warn(

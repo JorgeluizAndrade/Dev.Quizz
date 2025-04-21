@@ -1,6 +1,6 @@
 "use client";
 
-import SignInButton from "@/components/SignInButton";
+import SignInButton from "@/components/shared/SignInButton";
 import {
   Card,
   CardBody,
@@ -9,7 +9,7 @@ import {
   Divider,
   Image,
 } from "@nextui-org/react";
-import AnimatedTextWord from "./Ui/AnimatedTextWord";
+import AnimatedTextWord from "./ui/AnimatedTextWord";
 import React from "react";
 
 type Props = {};

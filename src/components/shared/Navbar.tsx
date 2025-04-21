@@ -1,9 +1,9 @@
 import { getAuthSession } from "@/lib/nextauth";
 import React from "react";
-import DevQuizzLogo from "./Ui/DevQuizzLogo";
+import DevQuizzLogo from "@/components/ui/DevQuizzLogo";
 import SignInButton from "./SignInButton";
-import UserAccount from "./UserAccount";
-import ThemeToggle from "./ThemeToggle";
+import UserAccount from "@/components/UserAccount";
+import ThemeToggle from "@/components/ThemeToggle";
 import Link from "next/link";
 import MobileNav from "./MobileNav";
 

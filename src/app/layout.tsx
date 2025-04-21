@@ -3,10 +3,10 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Providers } from '@/components/Providers'
 import { cn } from '@/lib/utils'
-import Navbar from '@/components/Navbar'
+import Navbar from '@/components/shared/Navbar'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import Footer from '@/components/Footer'
+import Footer from '@/components/shared/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 

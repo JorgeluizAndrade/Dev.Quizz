@@ -7,7 +7,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import type { Metadata } from "next";
-import ViewAnswers from "@/components/ViewAnswers";
+import ViewAnswers from "@/components/statistics/ViewAnswers";
 
 type Props = {
   params: {
