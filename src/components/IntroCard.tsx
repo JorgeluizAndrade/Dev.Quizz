@@ -9,7 +9,7 @@ import {
   Divider,
   Image,
 } from "@nextui-org/react";
-import AnimatedTextWord from "./ui/AnimatedTextWord";
+import AnimatedTextWord from "@/components/ui/AnimatedTextWord";
 import React from "react";
 
 type Props = {};

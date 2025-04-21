@@ -1,4 +1,4 @@
-import OpenEnded from "@/components/OpenEnded";
+import OpenEnded from "@/components/game/OpenEnded";
 import prisma  from "@/lib/db";
 import { getAuthSession } from "@/lib/nextauth";
 import { redirect } from "next/navigation";
