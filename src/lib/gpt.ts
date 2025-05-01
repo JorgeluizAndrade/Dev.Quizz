@@ -30,6 +30,7 @@ export async function strict_output(
   // if the output format contains dynamic elements of < or >, then add to the prompt to handle dynamic elements
   const dynamic_elements: boolean = /<.*?>/.test(JSON.stringify(output_format));
   // if the output format contains list elements of [ or ], then we add to the prompt to handle lists
+
   const list_output: boolean = /\[.*?\]/.test(JSON.stringify(output_format));
 
   // start off with no error message
@@ -45,6 +46,17 @@ Ensure that:
 2. No additional text, explanations, or formatting is included.
 3. If you cannot generate a valid JSON, return an empty array [].
 4. All questions and answers must be unique — avoid duplicates or similar phrasing.
+5. Generate the response in the following valid JSON format:
+[
+  {
+    "question": "...",
+    "answer": "...",
+    "option1": "...",
+    "option2": "...",
+    "option3": "..."
+  },
+  ...
+]
 `;
 
     if (list_output) {
@@ -146,7 +158,8 @@ Ensure that:
 
       res = res
         .replace(/(\w+):/g, '"$1":') // Adiciona aspas nos nomes das chaves
-        .replace(/\n/g, '');
+        .replace(/\n/g, '')
+        .replace(/[`']/g, '');
       output = JSON.parse(res);
       return list_input ? output : output[0];
     } catch (e) {
