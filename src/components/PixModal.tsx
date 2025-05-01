@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { useState, useRef } from "react"
-import Image from "next/image"
-import { Copy, Check, X, Coffee } from "lucide-react"
-import { Button, Card, CardBody, CardHeader, Tooltip } from "@nextui-org/react"
-import { motion, AnimatePresence } from "framer-motion"
-import qrcode from "../../public/qrcode.png"
+import { useState, useRef } from "react";
+import Image from "next/image";
+import { Copy, Check, X, Coffee } from "lucide-react";
+import { Button, Card, CardBody, CardHeader, Tooltip } from "@nextui-org/react";
+import { motion, AnimatePresence } from "framer-motion";
+import qrcode from "../../public/qrcode.png";
 
 export default function PixModal() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const pixKeyRef = useRef<HTMLSpanElement>(null)
+  const [isOpen, setIsOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const pixKeyRef = useRef<HTMLSpanElement>(null);
 
   const pixData = {
     email: "luizj1718@gmail.com",
     nome: "Jorge Luiz Andrade",
     banco: "PicPay Serviços S.A",
-  }
+  };
 
   const copyToClipboard = () => {
     if (pixKeyRef.current) {
-      navigator.clipboard.writeText(pixData.email)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      navigator.clipboard.writeText(pixData.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
-  }
+  };
 
   return (
     <>
@@ -64,7 +64,12 @@ export default function PixModal() {
             <Card className="w-72 shadow-lg border-2 border-amber-900">
               <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                 <h2 className="text-lg font-medium">Buy me a coffee</h2>
-                <Button variant="ghost" size="md" onClick={() => setIsOpen(false)} className="h-8 w-8">
+                <Button
+                  variant="ghost"
+                  size="md"
+                  onClick={() => setIsOpen(false)}
+                  className="h-8 w-8"
+                >
                   <X className="h-4 w-4" />
                 </Button>
               </CardHeader>
@@ -76,7 +81,12 @@ export default function PixModal() {
                   className="flex justify-center"
                 >
                   <div className="relative w-48 h-48 bg-white p-2 border rounded-md">
-                    <Image src={qrcode || "/placeholder.svg"} alt="QR Code PIX" fill className="object-contain" />
+                    <Image
+                      src={qrcode || "/placeholder.svg"}
+                      alt="QR Code PIX"
+                      fill
+                      className="object-contain"
+                    />
                   </div>
                 </motion.div>
 
@@ -86,12 +96,23 @@ export default function PixModal() {
                   transition={{ delay: 0.2, duration: 0.3 }}
                   className="flex items-center justify-between bg-amber-50 p-2 rounded-md"
                 >
-                  <span ref={pixKeyRef} className="text-sm font-medium text-amber-900 truncate max-w-[180px]">
+                  <span
+                    ref={pixKeyRef}
+                    className="text-sm font-medium text-amber-900 truncate max-w-[180px]"
+                  >
                     {pixData.email}
                   </span>
                   <Tooltip content={copied ? "Copied!" : "Copy PIX key"}>
-                    <Button variant="ghost" size="md" className="h-6 w-6" onClick={copyToClipboard}>
-                      <motion.div animate={copied ? { scale: [1, 1.2, 1] } : {}} transition={{ duration: 0.3 }}>
+                    <Button
+                      variant="ghost"
+                      size="md"
+                      className="h-6 w-6"
+                      onClick={copyToClipboard}
+                    >
+                      <motion.div
+                        animate={copied ? { scale: [1, 1.2, 1] } : {}}
+                        transition={{ duration: 0.3 }}
+                      >
                         {copied ? (
                           <Check className="h-3 w-3 text-green-500" />
                         ) : (
@@ -107,5 +128,5 @@ export default function PixModal() {
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }

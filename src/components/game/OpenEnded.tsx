@@ -2,7 +2,14 @@
 
 import { cn, timeDelta } from "@/lib/utils";
 import { checkAnswerSchemas, endGameSchema } from "@/features/quizz/schemas";
-import { Button, Card, CardBody, CardHeader, Chip, button } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  button,
+} from "@nextui-org/react";
 import { Game, Question } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -41,10 +48,10 @@ function OpenEnded({ game }: Props) {
 
   const { mutate: checkAnswer, isLoading: isChecking } = useMutation({
     mutationFn: async () => {
-      let filledAnswer = blankAnswer
-      document.querySelectorAll('#user-blank-input').forEach(input => {
-          filledAnswer = filledAnswer.replace("_______", input.value)
-          input.value = "";
+      let filledAnswer = blankAnswer;
+      document.querySelectorAll("#user-blank-input").forEach((input) => {
+        filledAnswer = filledAnswer.replace("_______", input.value);
+        input.value = "";
       });
       const payload: z.infer<typeof checkAnswerSchemas> = {
         questionId: currentQuestion.id,
@@ -87,7 +94,7 @@ function OpenEnded({ game }: Props) {
           setAveragePercentage((prev) => {
             return (prev + percentageSimilar) / (questionIndex + 1);
           });
-        } 
+        }
         if (questionIndex == game.questions.length - 1) {
           endGame();
           setHasEnded(true);
@@ -95,38 +102,34 @@ function OpenEnded({ game }: Props) {
         }
         setQuestionIndex((prev) => prev + 1);
       },
-      onError:(error) => {
+      onError: (error) => {
         console.error(error);
-        toast.error(
-          "Something went wrong",
-          {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          }
-        );
-      }
+        toast.error("Something went wrong", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      },
     });
   }, [checkAnswer, isChecking, game.questions.length, questionIndex, endGame]);
 
-  
-  if(hasEnded){
-    return(
+  if (hasEnded) {
+    return (
       <div className="absolute flex flex-col items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-      <div className="px-4 mt-3 font-bold text-white bg-green-500 rounded-md whitespace-nowrap">
-        You completed in:{" "}
-        {timeDelta(differenceInSeconds(now, game.timeStarted))}
+        <div className="px-4 mt-3 font-bold text-white bg-green-500 rounded-md whitespace-nowrap">
+          You completed in:{" "}
+          {timeDelta(differenceInSeconds(now, game.timeStarted))}
+        </div>
+        <Link href={"/"} className={cn(button(), "mt-2")}>
+          Go black to dashboard
+        </Link>
       </div>
-      <Link href={"/"} className={cn(button(), "mt-2")}>
-        Go black to dashboard
-      </Link>
-    </div>
-    )
+    );
   }
 
   return (

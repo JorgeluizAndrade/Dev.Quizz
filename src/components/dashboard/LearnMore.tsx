@@ -226,7 +226,7 @@ const LearnMore = () => {
                           color="secondary"
                           onClick={() => toggleRepo(item.key)}
                         >
-                            Show Info
+                          Show Info
                         </Button>
                       ) : (
                         item[columnKey as keyof typeof item]
