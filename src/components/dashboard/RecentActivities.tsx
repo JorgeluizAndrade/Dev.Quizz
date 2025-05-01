@@ -19,7 +19,7 @@ const RecentActivities = async (props: Props) => {
       header={"Your Recent Activities"}
       text={"See all History Quizzes"}
     >
-      <HistoryComponent limit={8} userId={session.user.id} />
+      <HistoryComponent limit={2} userId={session.user.id} />
     </RecentActivitiesComponents>
   );
 };

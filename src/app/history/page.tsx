@@ -27,7 +27,7 @@ const HistoryPage = async (props: Props) => {
               </Link>
             }
           >
-            <HistoryComponent limit={15} userId={session.user.id} />
+            <HistoryComponent limit={5} userId={session.user.id} />
           </RecentActivitiesComponents>
         </div>
       </div>

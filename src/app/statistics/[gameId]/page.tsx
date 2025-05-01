@@ -31,7 +31,7 @@ const StatisticsPage = async ({ params: { gameId } }: Props) => {
     include: {
       questions: true,
     },
-    cacheStrategy: { ttl: 300, swr: 60 }
+    cacheStrategy: { ttl: 300, swr: 60 } 
   });
   if (!game) {
     redirect("/");

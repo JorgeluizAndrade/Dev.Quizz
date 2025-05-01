@@ -31,10 +31,6 @@ export const authOptions: NextAuthOptions = {
             equals: token?.email,
           },
         },
-        cacheStrategy: {
-          ttl: 120,
-          swr: 60
-        }
       });
 
       if (db_user) {
