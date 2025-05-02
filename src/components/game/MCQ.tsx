@@ -127,21 +127,16 @@ const MCQ = ({ game }: Props) => {
           <CardBody className="text-center">
             <h2 className="text-2xl font-bold mb-4">Quiz Completed!</h2>
             <div className="mb-4 font-semibold text-green-600">
-              Time taken:{" "}
-              {timeDelta(differenceInSeconds(now, game.timeStarted))}
+              Time taken: {timeDelta(differenceInSeconds(now, game.timeStarted))}
             </div>
-            <MCQCounter
-              correctAnswers={correctAnswer}
-              wrongAnswers={wrongAnswer}
-            />
-            <div className="flex justify-center space-x-4 mt-6">
+            <MCQCounter correctAnswers={correctAnswer} wrongAnswers={wrongAnswer} />
+            <div className="flex flex-wrap justify-center gap-3 mt-6">
               <Tooltip
                 content={
                   <div className="px-1 py-2">
                     <div className="text-small font-bold">Hint</div>
                     <div className="text-tiny">
-                      If you want to play again, get your notebook and write
-                      down your the mistakes.
+                      If you want to play again, get your notebook and write down your the mistakes.
                     </div>
                   </div>
                 }
@@ -170,11 +165,22 @@ const MCQ = ({ game }: Props) => {
                   Another quizz 🧠
                 </span>
               </Button>
+
+              <Button
+                as="a"
+                href="https://docs.google.com/forms/d/e/1FAIpQLScRTSVZJwVHjLKVs-ngD6MfIRTlHzXU3C5feWHLV3v2NCqcEg/viewform"
+                color="success"
+                variant="flat"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Help improve Dev.Quizz!
+              </Button>
             </div>
           </CardBody>
         </Card>
       </div>
-    );
+    )
   }
 
   return (
