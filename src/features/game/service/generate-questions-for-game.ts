@@ -8,16 +8,17 @@ interface GenerateQuestionsParams {
   amount: number;
   type: "mcq" | "open_ended";
   userId: string;
+  nivel: "easy" | "intermediary" | "hard"
 }
 
 export async function generateQuestionsForGame(
   req: NextRequest,
-  { gameId, topic, amount, type }: GenerateQuestionsParams
+  { gameId, topic, amount, type, nivel }: GenerateQuestionsParams
 ) {
   try {
     const { data } = await axios.post(
       `${process.env.API_URL as string}/api/quizz/questions`,
-      { topic, amount, type },
+      { topic, amount, type, nivelType: nivel },
       {
         withCredentials: true,
         headers: {

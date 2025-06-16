@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const game = await createGame(req);
+
     return NextResponse.json({ gameId: game.id }, { status: 200 });
   } catch (error: any) {
     if (error.message === "UNAUTHORIZED") {
@@ -15,8 +16,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.issues }, { status: 400 });
     }
 
+    console.log("ERR: ", error)
+
     return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
-  }
+  } 
 }
 
 export async function GET(req: Request) {

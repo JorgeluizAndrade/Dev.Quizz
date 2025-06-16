@@ -37,8 +37,16 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
   const [gameId, setGameId] = React.useState<string | null>(null);
 
   const { mutateAsync: getQuestions, isLoading } = useMutation({
-    mutationFn: async ({ amount, topic, type }: Input) => {
-      const response = await axios.post("/api/quizz/game", { amount, topic, type });
+    mutationFn: async ({ amount, topic, type, nivelType }: Input) => {
+      const response = await axios.post("/api/quizz/game", {
+        amount,
+        topic,
+        type,
+        nivelType,
+      });
+
+      console.log("RESPONSE: ", response);
+
       return response.data;
     },
   });
@@ -49,6 +57,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
       topic: topicParam,
       type: "mcq",
       amount: 3,
+      nivelType: "easy",
     },
   });
 
@@ -59,6 +68,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
         amount: input.amount,
         topic: input.topic,
         type: input.type,
+        nivelType: input.nivelType,
       },
       {
         onSuccess: ({ gameId }: { gameId: string }) => {
@@ -172,6 +182,26 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
                       {tech.map((tech) => (
                         <SelectItem key={tech.key}>{tech.label}</SelectItem>
                       ))}
+                    </Select>
+                  )}
+                />
+
+                <Controller
+                  name="nivelType"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      isRequired
+                      name="nivelType"
+                      variant="underlined"
+                      label="Select difficulty level"
+                      className="max-w-xs"
+                      placeholder="Choose level"
+                    >
+                      <SelectItem key="easy">Easy🐣</SelectItem>
+                      <SelectItem key="intermediary">Intermediary🦅</SelectItem>
+                      <SelectItem key="hard">Hard🐦‍🔥</SelectItem>
                     </Select>
                   )}
                 />

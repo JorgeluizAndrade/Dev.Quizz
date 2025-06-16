@@ -3,8 +3,8 @@ CREATE TABLE `Account` (
     `id` CHAR(36) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
-    `provider` VARCHAR(191) NOT NULL,
-    `providerAccountId` VARCHAR(191) NOT NULL,
+    `provider` VARCHAR(100) NOT NULL,
+    `providerAccountId` VARCHAR(100) NOT NULL,
     `refresh_token` TEXT NULL,
     `access_token` TEXT NULL,
     `expires_at` INTEGER NULL,
@@ -21,7 +21,7 @@ CREATE TABLE `Account` (
 -- CreateTable
 CREATE TABLE `Session` (
     `id` CHAR(36) NOT NULL,
-    `sessionToken` VARCHAR(191) NOT NULL,
+    `sessionToken` VARCHAR(100) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `expires` DATETIME(3) NOT NULL,
 
@@ -34,7 +34,7 @@ CREATE TABLE `Session` (
 CREATE TABLE `User` (
     `id` CHAR(36) NOT NULL,
     `name` VARCHAR(191) NULL,
-    `email` VARCHAR(191) NULL,
+    `email` VARCHAR(100) NULL,
     `emailVerified` DATETIME(3) NULL,
     `image` VARCHAR(191) NULL,
 
@@ -47,11 +47,21 @@ CREATE TABLE `Game` (
     `id` CHAR(36) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `timeStarted` DATETIME(3) NOT NULL,
+    `nivelId` INTEGER NOT NULL,
     `topic` VARCHAR(191) NOT NULL,
     `timeEnded` DATETIME(3) NULL,
     `gameType` ENUM('mcq', 'open_ended') NOT NULL,
 
     INDEX `userId`(`userId`),
+    INDEX `Game_nivelId_idx`(`nivelId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Nivel` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nivelType` ENUM('easy', 'intermediary', 'hard') NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

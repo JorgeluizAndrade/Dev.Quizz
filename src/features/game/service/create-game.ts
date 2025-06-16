@@ -11,15 +11,35 @@ export async function createGame(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { amount, topic, type } = quizCreationSchema.parse(body);
+  const { amount, topic, type, nivelType } = quizCreationSchema.parse(body);
+
+  // await prisma.nivel.createMany({
+  //   data: [
+  //     { nivelType: 'easy' },
+  //     { nivelType: 'intermediary' },
+  //     { nivelType: 'hard' },
+  //   ],
+  //   skipDuplicates: true,
+  // });
+
+  const nivel = await prisma.nivel.findFirst({
+    where: { nivelType }
+  })
 
 
   const game = await prisma.game.create({
     data: {
       gameType: type,
       timeStarted: new Date(),
-      userId: session.user.id,
+      user: {
+        connect: {
+          id: session.user.id
+        },
+      },
       topic,
+      nivel: {
+        connect: { id: nivel.id }
+      }
     },
   });
 
@@ -29,6 +49,7 @@ export async function createGame(req: NextRequest) {
     amount,
     type,
     userId: session.user.id,
+    nivel: nivelType
   });
 
   return game;

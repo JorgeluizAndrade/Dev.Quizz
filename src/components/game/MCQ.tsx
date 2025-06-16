@@ -26,7 +26,7 @@ type Props = {
   game: Game & { questions: Pick<Question, "id" | "options" | "question">[] };
 };
 
-const MCQ = ({ game }: Props) => {
+const MCQ =  ({ game }: Props) =>  {
   const [questionIndex, setQuestionIndex] = React.useState(0);
   const [selectedChoice, setSelectedChoice] = React.useState<number>(-1);
   const [correctAnswer, setCorrectAnswer] = React.useState<number>(0);
@@ -47,6 +47,7 @@ const MCQ = ({ game }: Props) => {
   const currentQuestion = React.useMemo(() => {
     return game.questions[questionIndex];
   }, [questionIndex, game.questions]);
+
 
   const options = React.useMemo(() => {
     if (!currentQuestion) return [];
@@ -119,6 +120,7 @@ const MCQ = ({ game }: Props) => {
       },
     });
   }, [checkAnswer, isChecking, game.questions.length, questionIndex, endGame]);
+
 
   if (hasEnded) {
     return (
@@ -199,6 +201,16 @@ const MCQ = ({ game }: Props) => {
               }}
             >
               {game.topic}
+            </Chip>
+
+                        <Chip
+              variant="shadow"
+              classNames={{
+                base: "bg-gradient-to-br from-indigo-500 to-pink-500 border-small border-white/50 shadow-pink-500/30",
+                content: "drop-shadow shadow-black text-white",
+              }}
+            >
+              {game.nivelId}
             </Chip>
           </p>
           <div className="flex self-start mt-3 text-slate-400">
